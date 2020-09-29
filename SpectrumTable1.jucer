@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="edC3jk" name="SerialSynth" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
+  <MAINGROUP id="Kjl8WU" name="SerialSynth">
+    <GROUP id="{42C6CB8D-ECBA-EE94-0C88-1A353CFEB010}" name="Source">
+      <FILE id="gWGPPW" name="RGBColor.h" compile="0" resource="0" file="Source/RGBColor.h"/>
+      <GROUP id="{4BAA096C-3CB8-E93D-9AD8-9F635DC1C1DD}" name="ModProcessing">
+        <FILE id="Z1itxq" name="ModGenerator.cpp" compile="1" resource="0"
+              file="Source/ModGenerator.cpp"/>
+        <FILE id="AWcwbC" name="ModGenerator.h" compile="0" resource="0" file="Source/ModGenerator.h"/>
+        <FILE id="m38jo6" name="ModProcessor.cpp" compile="1" resource="0"
+              file="Source/ModProcessor.cpp"/>
+        <FILE id="quttRT" name="ModProcessor.h" compile="0" resource="0" file="Source/ModProcessor.h"/>
+      </GROUP>
+      <GROUP id="{E61861CB-9793-F58C-1A07-849555E93555}" name="ModComponents">
+        <FILE id="LebhTj" name="ModDestination.cpp" compile="1" resource="0"
+              file="Source/ModDestination.cpp"/>
+        <FILE id="yw318v" name="ModDestination.h" compile="0" resource="0"
+              file="Source/ModDestination.h"/>
+        <FILE id="DWDkhS" name="ModParentComponent.cpp" compile="1" resource="0"
+              file="Source/ModParentComponent.cpp"/>
+        <FILE id="RDWDi7" name="ModParentComponent.h" compile="0" resource="0"
+              file="Source/ModParentComponent.h"/>
+        <FILE id="DMIihr" name="ModSourceComponent.cpp" compile="1" resource="0"
+              file="Source/ModSourceComponent.cpp"/>
+        <FILE id="ES4lbJ" name="ModSourceComponent.h" compile="0" resource="0"
+              file="Source/ModSourceComponent.h"/>
+        <FILE id="SG8PAI" name="MultiModDestination.cpp" compile="1" resource="0"
+              file="Source/MultiModDestination.cpp"/>
+        <FILE id="vt6ig7" name="MultiModDestination.h" compile="0" resource="0"
+              file="Source/MultiModDestination.h"/>
+      </GROUP>
+      <GROUP id="{4AD4ACAA-F15F-8D2D-5B7D-DDE745D75487}" name="SoundProcessing">
+        <FILE id="skfGFG" name="MixProcessor.h" compile="0" resource="0" file="Source/MixProcessor.h"/>
+        <FILE id="scCsoT" name="SpectrumOscillator.cpp" compile="1" resource="0"
+              file="Source/SpectrumOscillator.cpp"/>
+        <FILE id="QVLf1S" name="SpectrumOscillator.h" compile="0" resource="0"
+              file="Source/SpectrumOscillator.h"/>
+        <FILE id="MVhs6M" name="SpectrumSynthVoice.h" compile="0" resource="0"
+              file="Source/SpectrumSynthVoice.h"/>
+      </GROUP>
+      <GROUP id="{F2BF066C-B7BA-F8BC-0C53-301FB7CC2209}" name="ChildComponents">
+        <FILE id="zXj9Za" name="MixerComponent.cpp" compile="1" resource="0"
+              file="Source/MixerComponent.cpp"/>
+        <FILE id="OixbTS" name="MixerComponent.h" compile="0" resource="0"
+              file="Source/MixerComponent.h"/>
+        <FILE id="nIzQOG" name="EnvelopeSliderSet.cpp" compile="1" resource="0"
+              file="Source/EnvelopeSliderSet.cpp"/>
+        <FILE id="UHDU0w" name="EnvelopeSliderSet.h" compile="0" resource="0"
+              file="Source/EnvelopeSliderSet.h"/>
+        <FILE id="VW5vqm" name="SpectrumParameterSet.cpp" compile="1" resource="0"
+              file="Source/SpectrumParameterSet.cpp"/>
+        <FILE id="zEbPjv" name="SpectrumParameterSet.h" compile="0" resource="0"
+              file="Source/SpectrumParameterSet.h"/>
+        <FILE id="O1eEqL" name="OscillatorGroup.cpp" compile="1" resource="0"
+              file="Source/OscillatorGroup.cpp"/>
+        <FILE id="VE6mUa" name="OscillatorGroup.h" compile="0" resource="0"
+              file="Source/OscillatorGroup.h"/>
+      </GROUP>
+      <GROUP id="{723D5FA1-9331-B693-9F5E-F0A9F383502E}" name="PluginCore">
+        <FILE id="fN92PZ" name="PluginProcessor.cpp" compile="1" resource="0"
+              file="Source/PluginProcessor.cpp"/>
+        <FILE id="lilUqE" name="PluginProcessor.h" compile="0" resource="0"
+              file="Source/PluginProcessor.h"/>
+        <FILE id="pllzQg" name="PluginEditor.cpp" compile="1" resource="0"
+              file="Source/PluginEditor.cpp"/>
+        <FILE id="QgK1fR" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      </GROUP>
+      <GROUP id="{9736A137-A571-AB4F-F166-20DE671CAD91}" name="Visualizers">
+        <FILE id="QaPGsC" name="OscilloscopeComponent.cpp" compile="1" resource="0"
+              file="Source/OscilloscopeComponent.cpp"/>
+        <FILE id="ais25V" name="OscilloscopeComponent.h" compile="0" resource="0"
+              file="Source/OscilloscopeComponent.h"/>
+        <FILE id="Vd3xrw" name="MaxiOscGraph.cpp" compile="1" resource="0"
+              file="Source/MaxiOscGraph.cpp"/>
+        <FILE id="VQ7aht" name="MaxiOscGraph.h" compile="0" resource="0" file="Source/MaxiOscGraph.h"/>
+      </GROUP>
+      <GROUP id="{209FD77B-BB0E-7B22-8E68-8B174F78AD0B}" name="Maximilian_bits">
+        <GROUP id="{7CCE8AD7-5126-AC14-3B51-3805332335F7}" name="src">
+          <GROUP id="{C797F31D-45BC-CABE-411F-9ECE55EC799F}" name="libs">
+            <FILE id="W68q4A" name="fft.cpp" compile="1" resource="0" file="../../Maximilian_bits/src/libs/fft.cpp"/>
+            <FILE id="OWNRuq" name="fft.h" compile="0" resource="0" file="../../Maximilian_bits/src/libs/fft.h"/>
+            <FILE id="BWxC4f" name="maxiFFT.cpp" compile="1" resource="0" file="../../Maximilian_bits/src/libs/maxiFFT.cpp"/>
+            <FILE id="B2Tjjz" name="maxiFFT.h" compile="0" resource="0" file="../../Maximilian_bits/src/libs/maxiFFT.h"/>
+            <FILE id="FgDXQ2" name="maxiMFCC.cpp" compile="1" resource="0" file="../../Maximilian_bits/src/libs/maxiMFCC.cpp"/>
+            <FILE id="xuinAc" name="maxiMFCC.h" compile="0" resource="0" file="../../Maximilian_bits/src/libs/maxiMFCC.h"/>
+            <FILE id="GVcJDL" name="sineTable.h" compile="0" resource="0" file="../../Maximilian_bits/src/libs/sineTable.h"/>
+          </GROUP>
+          <FILE id="C83PeP" name="maximilian.cpp" compile="1" resource="0" file="../../Maximilian_bits/src/maximilian.cpp"/>
+          <FILE id="jXNJSW" name="maximilian.h" compile="0" resource="0" file="../../Maximilian_bits/src/maximilian.h"/>
+        </GROUP>
+      </GROUP>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="SpectrumTable1" headerPath="/Users/hayden/Desktop/Programming/Maximilian_bits/src"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="SpectrumTable1"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>

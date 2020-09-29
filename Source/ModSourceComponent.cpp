@@ -76,8 +76,9 @@ LfoComponent::LfoComponent(juce::String desc, juce::DragAndDropContainer* parent
 
 void LfoComponent::paint(juce::Graphics &g)
 {
-    juce::Colour background = color.RGBColor(50, 55, 55);
-    g.fillAll(background);
+    juce::Colour background = modSource.getCenterColor();
+    auto darkened = color.blend(background, juce::Colours::black, 0.1);
+    g.fillAll(darkened);
     juce::Rectangle<float> area = getLocalBounds().toFloat();
     juce::Colour outlineColor = color.RGBColor(210, 210, 210);
     g.setColour(outlineColor);

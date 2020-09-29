@@ -23,4 +23,33 @@ struct ColorCreator
     {
         return(juce::Colour(juce::uint8(r), juce::uint8(g), juce::uint8(b), juce::uint8(a)));
     }
+    
+    juce::Colour blend(juce::Colour colorA, juce::Colour colorB, float ratio)
+    {
+        auto fRedA = colorA.getFloatRed();
+        auto fGreenA = colorA.getFloatGreen();
+        auto fBlueA = colorA.getFloatBlue();
+        
+        auto fRedB = colorB.getFloatRed();
+        auto fGreenB = colorB.getFloatGreen();
+        auto fBlueB = colorB.getFloatBlue();
+        
+        auto adjRedA = fRedA * (1.0f - ratio);
+        auto adjGreenA = fGreenA * (1.0f - ratio);
+        auto adjBlueA = fBlueA * (1.0f - ratio);
+        
+        auto adjRedB = fRedB * ratio;
+        auto adjGreenB = fGreenB * ratio;
+        auto adjBlueB = fBlueB * ratio;
+        
+        auto mixRed = (adjRedA + adjRedB) / 2.0f;
+        auto mixGreen = (adjGreenA + adjGreenB) / 2.0f;
+        auto mixBlue = (adjBlueA + adjBlueB) / 2.0f;
+        
+        int iRed = floor(mixRed * 255);
+        int iGreen = floor(mixGreen * 255);
+        int iBlue = floor(mixBlue * 255);
+        
+        return RGBColor(iRed, iGreen, iBlue);
+    }
 };

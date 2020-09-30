@@ -20,6 +20,12 @@ void ModDestProcessor::addSource(juce::String sourceId)
         sources.add(new ModSourceProcessor(sourceId, allGens->pLfo1));
     else if(sourceId == "lfo2Source")
         sources.add(new ModSourceProcessor(sourceId, allGens->pLfo2));
+    else if(sourceId == "env0Source")
+        sources.add(new ModSourceProcessor(sourceId, allGens->pEnv0));
+    else if(sourceId == "env1Source")
+        sources.add(new ModSourceProcessor(sourceId, allGens->pEnv1));
+    else if(sourceId == "env2Source")
+        sources.add(new ModSourceProcessor(sourceId, allGens->pEnv2));
 }
 
 void ModDestProcessor::removeSource(juce::String sourceStr)

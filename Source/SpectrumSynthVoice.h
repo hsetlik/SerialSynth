@@ -61,6 +61,98 @@ public:
         }
         thisLfo->setRate(*value);
     }
+    void setModAttack(std::atomic<float>* value, int index)
+    {
+        EnvelopeProcessor* thisEnv;
+        switch(index)
+        {
+            case 0:
+            {
+                thisEnv = allGens.pEnv0;
+                break;
+            }
+            case 1:
+            {
+                thisEnv = allGens.pEnv1;
+                break;
+            }
+            case 2:
+            {
+                thisEnv = allGens.pEnv2;
+                break;
+            }
+        }
+        thisEnv->setAttack(*value);
+    }
+    void setModDecay(std::atomic<float>* value, int index)
+    {
+        EnvelopeProcessor* thisEnv;
+        switch(index)
+        {
+            case 0:
+            {
+                thisEnv = allGens.pEnv0;
+                break;
+            }
+            case 1:
+            {
+                thisEnv = allGens.pEnv1;
+                break;
+            }
+            case 2:
+            {
+                thisEnv = allGens.pEnv2;
+                break;
+            }
+        }
+        thisEnv->setDecay(*value);
+    }
+    void setModSustain(std::atomic<float>* value, int index)
+    {
+        EnvelopeProcessor* thisEnv;
+        switch(index)
+        {
+            case 0:
+            {
+                thisEnv = allGens.pEnv0;
+                break;
+            }
+            case 1:
+            {
+                thisEnv = allGens.pEnv1;
+                break;
+            }
+            case 2:
+            {
+                thisEnv = allGens.pEnv2;
+                break;
+            }
+        }
+        thisEnv->setSustain(*value);
+    }
+    void setModRelease(std::atomic<float>* value, int index)
+    {
+        EnvelopeProcessor* thisEnv;
+        switch(index)
+        {
+            case 0:
+            {
+                thisEnv = allGens.pEnv0;
+                break;
+            }
+            case 1:
+            {
+                thisEnv = allGens.pEnv1;
+                break;
+            }
+            case 2:
+            {
+                thisEnv = allGens.pEnv2;
+                break;
+            }
+        }
+        thisEnv->setRelease(*value);
+    }
     void setOscLevel(std::atomic<float>* value, int n)
     {
         mixer.setOscLevel(*value, n);
@@ -187,14 +279,18 @@ public:
         {
             allOscs[i]->setFundamental(newPitch);
             allOscs[i]->envelope1.trigger = 1;
+            
         }
+        allGens.allTriggersOn();
     }
     void stopNote (float velocity, bool allowTailOff)
     {
         for(int i = 0; i < 3; ++i)
         {
             allOscs[i]->envelope1.trigger = 0;
+            
         }
+        allGens.allTriggersOff();
         allowTailOff = true;
         if(velocity == 0)
             clearCurrentNote();

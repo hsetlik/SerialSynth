@@ -92,3 +92,54 @@ public:
 };
 
 
+class EnvelopeComponent : public juce::Component
+{
+public:
+    //functions
+    EnvelopeComponent(juce::String desc, juce::DragAndDropContainer* parentContainer, int index, juce::Colour modSourceColor);
+    ~EnvelopeComponent() {}
+    void paint(juce::Graphics& g) override;
+    void resized() override;
+    void attachToTree(juce::AudioProcessorValueTreeState* tree)
+    {
+        juce::String iStr = juce::String(envIndex);
+        auto attackId = "modEnvAttackParam" + iStr;
+        auto decayId = "modEnvDecayParam" + iStr;
+        auto sustainId = "modEnvSustainParam" + iStr;
+        auto releaseId = "modEnvReleaseParam" + iStr;
+        
+        aAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, attackId, aSlider));
+        dAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, decayId, dSlider));
+        sAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, sustainId, sSlider));
+        rAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, releaseId, rSlider));
+    }
+    //data
+    ModSourceComponent modSource;
+    int envIndex;
+    juce::Slider aSlider;
+    juce::Slider dSlider;
+    juce::Slider sSlider;
+    juce::Slider rSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> aAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> dAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> rAttach;
+    
+    ColorCreator color;
+};
+
+class TabbedEnvelopeComponent : public juce::TabbedComponent
+{
+public:
+    //functions
+    TabbedEnvelopeComponent(juce::DragAndDropContainer* container);
+    ~TabbedEnvelopeComponent() {}
+    void attachAllToTree(juce::AudioProcessorValueTreeState* tree);
+    //data
+    juce::OwnedArray<EnvelopeComponent> contents;
+    ColorCreator color;
+    
+    
+};
+
+

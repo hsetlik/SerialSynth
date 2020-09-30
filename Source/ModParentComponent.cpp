@@ -27,6 +27,7 @@ void ModParentComponent::resized()
     int n = getHeight() / 24;
     oscSet.setBounds(0, 0, getWidth() - (5 * n),18 * n);
     lfoSet.setBounds(0, 18 * n, 8 * n, 6.25 * n);
+    envSet.setBounds(8 * n, 18 * n, 12 * n, 6.25 * n);
     mixer.setBounds(getWidth() - (5 * n), 0, 5 * n, 18 * n);
 }
 

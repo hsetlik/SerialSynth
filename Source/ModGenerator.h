@@ -65,6 +65,47 @@ private:
     maxiOsc osc;
 };
 
+class EnvelopeProcessor : public ModGenerator
+{
+public:
+    EnvelopeProcessor(juce::String idStr) : ModGenerator(idStr)
+    {
+        
+    }
+    ~EnvelopeProcessor() {}
+    float getNextSampleValue() override
+    {
+        return(envelope.adsr(1.0, envelope.trigger));
+    }
+    void setAttack(float value)
+    {
+        envelope.setAttack(value);
+    }
+    void setDecay(float value)
+    {
+        envelope.setDecay(value);
+    }
+    void setSustain(float value)
+    {
+        envelope.setSustain(value);
+    }
+    void setRelease(float value)
+    {
+        envelope.setRelease(value);
+    }
+    void triggerOn()
+    {
+        envelope.trigger = 1;
+    }
+    void triggerOff()
+    {
+        envelope.trigger = 0;
+    }
+private:
+    maxiEnv envelope;
+    
+};
+
 
 class VoiceModGenerators
 //each voice needs to own one of these, it stores all the ModGenerator subclasses and allows the oscillators to be intialized with a reference to this object
@@ -79,12 +120,34 @@ public:
         pLfo1 = dynamic_cast<LfoProcessor*>(gens.getLast());
         gens.add(new LfoProcessor("lfo2Source"));
         pLfo2 = dynamic_cast<LfoProcessor*>(gens.getLast());
+        
+        gens.add(new EnvelopeProcessor("env0Source"));
+        pEnv0 = dynamic_cast<EnvelopeProcessor*>(gens.getLast());
+        gens.add(new EnvelopeProcessor("env1Source"));
+        pEnv1 = dynamic_cast<EnvelopeProcessor*>(gens.getLast());
+        gens.add(new EnvelopeProcessor("env2Source"));
+        pEnv2 = dynamic_cast<EnvelopeProcessor*>(gens.getLast());
     }
     ~VoiceModGenerators() {}
+    void allTriggersOn()
+    {
+        pEnv0->triggerOn();
+        pEnv1->triggerOn();
+        pEnv2->triggerOn();
+    }
+    void allTriggersOff()
+    {
+        pEnv0->triggerOff();
+        pEnv1->triggerOff();
+        pEnv2->triggerOff();
+    }
     juce::OwnedArray<ModGenerator> gens;
     LfoProcessor* pLfo0;
     LfoProcessor* pLfo1;
     LfoProcessor* pLfo2;
+    EnvelopeProcessor* pEnv0;
+    EnvelopeProcessor* pEnv1;
+    EnvelopeProcessor* pEnv2;
 };
 
 

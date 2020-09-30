@@ -14,44 +14,67 @@ juce::AudioProcessorValueTreeState::ParameterLayout createLayout()
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
     for(int i = 0; i < 3; ++i)
     {
-    juce::String iStr = juce::String(i);
-    juce::String p0Id = "p0Param" + iStr;
-    juce::String p0Name = "Parameter 0";
-    juce::String nId = "nParam" + iStr;
-    juce::String nName = "number of harmonics";
-    juce::String p1Id = "p1Param" + iStr;
-    juce::String p1Name = "Parameter 2";
-    juce::String algId = "algParam" + iStr;
-    juce::String algName = "Serial Amplitude Modulation";
-    juce::String p1SnapId = "p1SnapParam" + iStr;
-    juce::String p1SnapName = "Parameter 1 Snap";
-    juce::String p0SnapId = "p0SnapParam" + iStr;
-    juce::String p0SnapName = "Parameter 0 Snap";
+        juce::String iStr = juce::String(i);
+        juce::String p0Id = "p0Param" + iStr;
+        juce::String p0Name = "Parameter 0";
+        juce::String nId = "nParam" + iStr;
+        juce::String nName = "number of harmonics";
+        juce::String p1Id = "p1Param" + iStr;
+        juce::String p1Name = "Parameter 2";
+        juce::String algId = "algParam" + iStr;
+        juce::String algName = "Serial Amplitude Modulation";
+        juce::String p1SnapId = "p1SnapParam" + iStr;
+        juce::String p1SnapName = "Parameter 1 Snap";
+        juce::String p0SnapId = "p0SnapParam" + iStr;
+        juce::String p0SnapName = "Parameter 0 Snap";
+            
+        juce::String aId = "attackParam" + iStr;
+        juce::String aName = "Oscillator " + iStr + " Attack";
+        juce::String dId = "decayParam" + iStr;
+        juce::String dName = "Oscillator " + iStr + " Decay";
+        juce::String sId = "sustainParam" + iStr;
+        juce::String sName = "Oscillator " + iStr + " Sustain";
+        juce::String rId = "releaseParam" + iStr;
+        juce::String rName = "Oscillator " + iStr + " Release";
+        juce::String oscLevelId = "osc" + iStr + "LevelParam";
+        juce::String oscLevelName = "Oscillator " + iStr + " level";
         
-    juce::String aId = "attackParam" + iStr;
-    juce::String aName = "Oscillator " + iStr + " Attack";
-    juce::String dId = "decayParam" + iStr;
-    juce::String dName = "Oscillator " + iStr + " Decay";
-    juce::String sId = "sustainParam" + iStr;
-    juce::String sName = "Oscillator " + iStr + " Sustain";
-    juce::String rId = "releaseParam" + iStr;
-    juce::String rName = "Oscillator " + iStr + " Release";
-    juce::String oscLevelId = "osc" + iStr + "LevelParam";
-    juce::String oscLevelName = "Oscillator " + iStr + " level";
+        juce::String attackId = "modEnvAttackParam" + iStr;
+        juce::String attackName = "Envelope " + iStr + " attack";
+        juce::String decayId = "modEnvDecayParam" + iStr;
+        juce::String decayName = "Envelope " + iStr + " decay";
+        juce::String sustainId = "modEnvSustainParam" + iStr;
+        juce::String sustainName = "Envelope " + iStr + " sustain";
+        juce::String releaseId = "modEnvReleaseParam" + iStr;
+        juce::String releaseName = "Envelope " + iStr + " release";
         
-    layout.add(std::make_unique<juce::AudioParameterFloat>(oscLevelId, oscLevelName, 0.0, 1.0, 1.0));
-    
-    layout.add(std::make_unique<juce::AudioParameterFloat>(aId, aName, 1.0, 15000.0, 25.0));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(dId, dName, 1.0, 15000.0, 65.0));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(sId, sName, 0.0, 1.0, 0.6));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(rId, rName, 1.0, 15000.0, 100.0));
-    
-    layout.add(std::make_unique<juce::AudioParameterFloat>(nId, nName, 1.0, 40.0, 6.0));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(p0Id, p0Name, 0.0, 15.0, 1.0));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(p1Id, p1Name, 1.0, 15.0, 1.0));
-    layout.add(std::make_unique<juce::AudioParameterBool>(algId, algName, false));
-    layout.add(std::make_unique<juce::AudioParameterBool>(p1SnapId, p1SnapName, false));
-    layout.add(std::make_unique<juce::AudioParameterBool>(p0SnapId, p0SnapName, false));
+        juce::NormalisableRange<float> attackRange(1.0f, 20000.0f, 0.01f, 0.3f);
+        attackRange.setSkewForCentre(250.0f);
+        layout.add(std::make_unique<juce::AudioParameterFloat>(attackId, attackName, attackRange, 20.0f));
+        
+        juce::NormalisableRange<float> decayRange(1.0f, 20000.0f, 0.01f, 0.3f);
+        decayRange.setSkewForCentre(1000.0f);
+        layout.add(std::make_unique<juce::AudioParameterFloat>(decayId, decayName, decayRange, 150.0f));
+        
+        layout.add(std::make_unique<juce::AudioParameterFloat>(sustainId, sustainName, 0.0, 1.0, 0.6));
+        
+        juce::NormalisableRange<float> releaseRange(1.0f, 20000.0f, 0.01f, 0.3f);
+        releaseRange.setSkewForCentre(2500.0f);
+        layout.add(std::make_unique<juce::AudioParameterFloat>(releaseId, releaseName, releaseRange, 150.0f));
+        
+        layout.add(std::make_unique<juce::AudioParameterFloat>(oscLevelId, oscLevelName, 0.0, 1.0, 1.0));
+        
+        layout.add(std::make_unique<juce::AudioParameterFloat>(aId, aName, 1.0, 15000.0, 25.0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>(dId, dName, 1.0, 15000.0, 65.0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>(sId, sName, 0.0, 1.0, 0.6));
+        layout.add(std::make_unique<juce::AudioParameterFloat>(rId, rName, 1.0, 15000.0, 100.0));
+        
+        layout.add(std::make_unique<juce::AudioParameterFloat>(nId, nName, 1.0, 40.0, 6.0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>(p0Id, p0Name, 0.0, 15.0, 1.0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>(p1Id, p1Name, 1.0, 15.0, 1.0));
+        layout.add(std::make_unique<juce::AudioParameterBool>(algId, algName, false));
+        layout.add(std::make_unique<juce::AudioParameterBool>(p1SnapId, p1SnapName, false));
+        layout.add(std::make_unique<juce::AudioParameterBool>(p0SnapId, p0SnapName, false));
     }
     auto masterLevelId = "masterLevelParam";
     auto masterLevelName = "Master Level";
@@ -89,6 +112,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout createLayout()
     layout.add(std::make_unique<juce::AudioParameterChoice>(lfoTypeId, lfoTypeName, wavetypes, 0));
     layout.add(std::make_unique<juce::AudioParameterChoice>(lfoTypeId1, lfoTypeName1, wavetypes, 0));
     layout.add(std::make_unique<juce::AudioParameterChoice>(lfoTypeId2, lfoTypeName2, wavetypes, 0));
+    
+    
     
     return layout;
 }
@@ -250,6 +275,16 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
                 
                 juce::String lfoRateName = "lfoRateParam" + nStr;
                 juce::String lfoTypeName = "lfoWaveParam" + nStr;
+                
+                juce::String attackName = "modEnvAttackParam" + nStr;
+                juce::String decayName = "modEnvDecayParam" + nStr;
+                juce::String sustainName = "modEnvSustainParam" + nStr;
+                juce::String releaseName = "modEnvDecayParam" + nStr;
+                
+                thisVoice->setModAttack(tree.getRawParameterValue(attackName), n);
+                thisVoice->setModDecay(tree.getRawParameterValue(decayName), n);
+                thisVoice->setModSustain(tree.getRawParameterValue(sustainName), n);
+                thisVoice->setModRelease(tree.getRawParameterValue(releaseName), n);
                
                 thisVoice->setVoiceP1Snap(tree.getRawParameterValue(p1SnapName), n);
                 thisVoice->setAttack(tree.getRawParameterValue(aName), n);

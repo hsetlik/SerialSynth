@@ -12,7 +12,11 @@
 #include "SpectrumParameterSet.h"
 
 //==============================================================================
-SpectrumParameterSet::SpectrumParameterSet(int index, GraphValueSet* values, juce::DragAndDropContainer* container, SpectrumTable1AudioProcessor& proc, juce::Slider::Listener* lstnr) :
+SpectrumParameterSet::SpectrumParameterSet(int index,
+                                           GraphValueSet* values,
+                                           juce::DragAndDropContainer* container,
+                                           SpectrumTable1AudioProcessor& proc,
+                                           juce::Slider::Listener* lstnr) :
 nSlider("nDest", false, 1.0f, 40.0f, index, lstnr, proc),
 p0Slider("p0Dest", false, 1.0f, 15.0f, index, lstnr, proc),
 p1Slider("p1Dest" , false, 1.0f, 15.0f, index, lstnr, proc),
@@ -20,8 +24,6 @@ graph(values),
 envSliders(index),
 parentContainer(container),
 oscIndex(index)
-
-
 {
     addAndMakeVisible(&envSliders);
     addAndMakeVisible(&nSlider);

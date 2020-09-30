@@ -38,6 +38,99 @@ public:
         }
     }
     
+    float getEnvAttack(int index)
+    {
+        EnvelopeProcessor* thisEnv;
+        switch(index)
+        {
+            case 0:
+            {
+                thisEnv = allGens.pEnv0;
+                break;
+            }
+            case 1:
+            {
+                thisEnv = allGens.pEnv1;
+                break;
+            }
+            case 2:
+            {
+                thisEnv = allGens.pEnv2;
+                break;
+            }
+        }
+        return thisEnv->attackValue();
+    }
+    float getEnvDecay(int index)
+    {
+        EnvelopeProcessor* thisEnv;
+        switch(index)
+        {
+            case 0:
+            {
+                thisEnv = allGens.pEnv0;
+                break;
+            }
+            case 1:
+            {
+                thisEnv = allGens.pEnv1;
+                break;
+            }
+            case 2:
+            {
+                thisEnv = allGens.pEnv2;
+                break;
+            }
+        }
+        return thisEnv->decayValue();
+    }
+    float getEnvSustain(int index)
+    {
+        EnvelopeProcessor* thisEnv;
+        switch(index)
+        {
+            case 0:
+            {
+                thisEnv = allGens.pEnv0;
+                break;
+            }
+            case 1:
+            {
+                thisEnv = allGens.pEnv1;
+                break;
+            }
+            case 2:
+            {
+                thisEnv = allGens.pEnv2;
+                break;
+            }
+        }
+        return thisEnv->sustainValue();
+    }
+    float getEnvRelease(int index)
+    {
+        EnvelopeProcessor* thisEnv;
+        switch(index)
+        {
+            case 0:
+            {
+                thisEnv = allGens.pEnv0;
+                break;
+            }
+            case 1:
+            {
+                thisEnv = allGens.pEnv1;
+                break;
+            }
+            case 2:
+            {
+                thisEnv = allGens.pEnv2;
+                break;
+            }
+        }
+        return thisEnv->releaseValue();
+    }
+    
     void setLfoRate(std::atomic<float>* value, int index)
     {
         LfoProcessor* thisLfo;

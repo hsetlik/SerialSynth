@@ -11,6 +11,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "maximilian.h"
+
 /*
  abstract base class for anything that generates a modulation signal as a floating point number between 0 and 1
  override the getNextSampleValue function to do calculations from the source
@@ -80,18 +81,22 @@ public:
     void setAttack(float value)
     {
         envelope.setAttack(value);
+        
     }
     void setDecay(float value)
     {
         envelope.setDecay(value);
+        
     }
     void setSustain(float value)
     {
         envelope.setSustain(value);
+        
     }
     void setRelease(float value)
     {
         envelope.setRelease(value);
+        
     }
     void triggerOn()
     {
@@ -100,6 +105,22 @@ public:
     void triggerOff()
     {
         envelope.trigger = 0;
+    }
+    float attackValue()
+    {
+        return envelope.attack;
+    }
+    float decayValue()
+    {
+        return envelope.decay;
+    }
+    float sustainValue()
+    {
+        return envelope.sustain;
+    }
+    float releaseValue()
+    {
+        return envelope.release;
     }
 private:
     maxiEnv envelope;

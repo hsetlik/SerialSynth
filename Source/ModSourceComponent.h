@@ -12,6 +12,7 @@
 #include <JuceHeader.h>
 #include "maximilian.h"
 #include "RGBColor.h"
+#include "AdsrGraph.h"
 //#include "ModParentComponent.h"
 //==============================================================================
 /*
@@ -114,6 +115,7 @@ public:
         rAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, releaseId, rSlider));
     }
     //data
+    AdsrGraph graph;
     ModSourceComponent modSource;
     int envIndex;
     juce::Slider aSlider;

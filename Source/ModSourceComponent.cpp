@@ -121,10 +121,12 @@ void TabbedLfoComponent::attachAllToTree(juce::AudioProcessorValueTreeState *tar
 }
 
 EnvelopeComponent::EnvelopeComponent(juce::String desc, juce::DragAndDropContainer* parentContainer, int index, juce::Colour modSourceColor) :
-modSource(desc, parentContainer), envIndex(index)
+modSource(desc, parentContainer), envIndex(index), graph(&aSlider, &dSlider, &sSlider, &rSlider)
 {
     addAndMakeVisible(&modSource);
     modSource.changeCenterColor(modSourceColor);
+    
+    addAndMakeVisible(&graph);
     
     addAndMakeVisible(&aSlider);
     aSlider.setSliderStyle(juce::Slider::Rotary);
@@ -169,11 +171,13 @@ void EnvelopeComponent::paint(juce::Graphics &g)
 void EnvelopeComponent::resized()
 {
     int n = getWidth() / 40;
-    aSlider.setBounds(2 * n, 4 * n, 6 * n, 7 * n);
-    dSlider.setBounds(12 * n, 4 * n, 6 * n, 7 * n);
-    sSlider.setBounds(22 * n, 4 * n, 6 * n, 7 * n);
-    rSlider.setBounds(32 * n, 4 * n, 6 * n, 7 * n);
+    
+    aSlider.setBounds(2 * n, 8 * n, 6 * n, 7 * n);
+    dSlider.setBounds(12 * n, 8 * n, 6 * n, 7 * n);
+    sSlider.setBounds(22 * n, 8 * n, 6 * n, 7 * n);
+    rSlider.setBounds(32 * n, 8 * n, 6 * n, 7 * n);
     modSource.setBounds(2 * n, n, 3.5 * n, 3.5 * n);
+    graph.setBounds(8 * n, n, 10 * n, 6 * n);
 }
 
 

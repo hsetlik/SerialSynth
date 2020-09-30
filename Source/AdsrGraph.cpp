@@ -64,5 +64,19 @@ void AdsrGraph::paint(juce::Graphics &g)
     trace.closeSubPath();
     
     auto strokeType = juce::PathStrokeType(1.0);
+    
+    auto thinStroke = juce::PathStrokeType(0.6);
+    if(hasSecondTrace)
+    {
+        g.setColour(trace2Color);
+        g.strokePath(*secondTrace, thinStroke);
+    }
+    if(hasThirdTrace)
+    {
+        g.setColour(trace3Color);
+        g.strokePath(*thirdTrace, thinStroke);
+    }
+    g.setColour(traceColor);
+    
     g.strokePath(trace, strokeType);
 }

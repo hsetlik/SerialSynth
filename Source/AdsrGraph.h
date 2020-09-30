@@ -39,17 +39,39 @@ public:
         lastRelease = pRelease->getValue();
         }
     }
+    void setTraceColors(juce::Colour color1, juce::Colour color2, juce::Colour color3)
+    {
+        traceColor = color1;
+        trace2Color = color.blend(color2, background, 0.05);
+        trace3Color = color.blend(color3, background, 0.05);
+    }
     void paint(juce::Graphics &g) override;
     void timerCallback() override
     {
         repaint();
     }
-    
+    void addSecondTrace(juce::Path* path)
+    {
+        secondTrace = path;
+        hasSecondTrace = true;
+    }
+    void addThirdTrace(juce::Path* path)
+    {
+        thirdTrace = path;
+        hasThirdTrace = true;
+    }
     juce::Path trace;
+    bool hasSecondTrace = false;
+    juce::Path* secondTrace;
+    bool hasThirdTrace = false;
+    juce::Path* thirdTrace;
+    
 private:
     ColorCreator color;
     juce::Colour background = juce::Colours::darkgrey;
     juce::Colour traceColor = juce::Colours::orange;
+    juce::Colour trace2Color;
+    juce::Colour trace3Color;
     double lastAttack;
     double lastDecay;
     double lastSustain;

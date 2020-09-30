@@ -198,6 +198,22 @@ TabbedEnvelopeComponent::TabbedEnvelopeComponent(juce::DragAndDropContainer* par
     addTab("ENV 3", color2, contents[2], false);
     
     setCurrentTabIndex(0);
+    juce::Path* trace0 = &contents[0]->graph.trace;
+    juce::Path* trace1 = &contents[1]->graph.trace;
+    juce::Path* trace2 = &contents[2]->graph.trace;
+    
+    contents[0]->graph.addSecondTrace(trace1);
+    contents[0]->graph.addThirdTrace(trace2);
+    
+    contents[1]->graph.addSecondTrace(trace0);
+    contents[1]->graph.addThirdTrace(trace2);
+    
+    contents[2]->graph.addSecondTrace(trace0);
+    contents[2]->graph.addThirdTrace(trace1);
+    
+    contents[0]->graph.setTraceColors(color0, color1, color2);
+    contents[1]->graph.setTraceColors(color1, color0, color2);
+    contents[2]->graph.setTraceColors(color2, color0, color1);
 }
 
 void TabbedEnvelopeComponent::attachAllToTree(juce::AudioProcessorValueTreeState *target)

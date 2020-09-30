@@ -87,9 +87,9 @@ void MaxiOscGraph::paint (juce::Graphics& g)
     g.setColour(traceColor);
     if(waveDataPoints.size() != 0)
     {
-        juce::Path trace;
+        juce::Path oscTrace;
         juce::Rectangle<float> area = getLocalBounds().toFloat();
-        trace.scaleToFit(area.getX(), area.getY(), area.getWidth(), area.getHeight(), true);
+        oscTrace.scaleToFit(area.getX(), area.getY(), area.getWidth(), area.getHeight(), true);
         auto yOffest = area.getHeight() / 2;
         auto xDelta = area.getWidth() / pointsPerFrame;
         for(int i = 0; i < pointsPerFrame; ++i)
@@ -98,19 +98,19 @@ void MaxiOscGraph::paint (juce::Graphics& g)
             float newY = (waveDataPoints[i] * amplitude) + yOffest;
             if(i == 0)
             {
-                trace.startNewSubPath(newX, newY);
+                oscTrace.startNewSubPath(newX, newY);
             }
             else
             {
-                trace.lineTo(newX, newY);
+                oscTrace.lineTo(newX, newY);
             }
         }
-        trace.lineTo(area.getRight(), area.getHeight());
-        trace.lineTo(area.getX(), area.getHeight());
-        trace.closeSubPath();
+        oscTrace.lineTo(area.getRight(), area.getHeight());
+        oscTrace.lineTo(area.getX(), area.getHeight());
+        oscTrace.closeSubPath();
         
         auto strokeType1 = juce::PathStrokeType(1.0f);
-        g.strokePath(trace, strokeType1);
+        g.strokePath(oscTrace, strokeType1);
         auto frameColor = color.RGBColor(15, 15, 15);
         g.setColour(frameColor);
         g.drawRect(area, 1.5f);

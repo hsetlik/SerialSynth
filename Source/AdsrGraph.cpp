@@ -63,6 +63,8 @@ void AdsrGraph::paint(juce::Graphics &g)
     trace.lineTo(area.getWidth(), area.getHeight());
     trace.closeSubPath();
     
+    trace.scaleToFit(area.getX(), area.getY(), area.getWidth(), area.getHeight(), false);
+    
     auto strokeType = juce::PathStrokeType(1.0);
     
     auto thinStroke = juce::PathStrokeType(0.6);

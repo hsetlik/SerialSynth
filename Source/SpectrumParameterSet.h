@@ -39,6 +39,10 @@ public:
     MultiModDestination p0Slider;
     MultiModDestination p1Slider;
     
+    //TODO
+    //-detune slider and modDest
+    //-pan slider and modDest
+    
     juce::Slider::Listener* listener;
     
     MaxiOscGraph graph;

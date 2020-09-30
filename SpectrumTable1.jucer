@@ -69,6 +69,8 @@
         <FILE id="QgK1fR" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       </GROUP>
       <GROUP id="{9736A137-A571-AB4F-F166-20DE671CAD91}" name="Visualizers">
+        <FILE id="SL02ie" name="AdsrGraph.cpp" compile="1" resource="0" file="Source/AdsrGraph.cpp"/>
+        <FILE id="dNYf5U" name="AdsrGraph.h" compile="0" resource="0" file="Source/AdsrGraph.h"/>
         <FILE id="QaPGsC" name="OscilloscopeComponent.cpp" compile="1" resource="0"
               file="Source/OscilloscopeComponent.cpp"/>
         <FILE id="ais25V" name="OscilloscopeComponent.h" compile="0" resource="0"

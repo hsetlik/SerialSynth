@@ -15,6 +15,7 @@
 #include "OscillatorGroup.h"
 #include "ModDestination.h"
 #include "MixerComponent.h"
+#include "FilterControls.h"
 
 //==============================================================================
 /*
@@ -23,6 +24,7 @@ class ModParentComponent  : public juce::Component, public juce::DragAndDropCont
 {
 public:
     ModParentComponent(SpectrumTable1AudioProcessor& proc) :
+    filter(proc, this),
     oscSet(proc, this, this),
     lfoSet(this),
     envSet(this),
@@ -32,6 +34,7 @@ public:
         addAndMakeVisible(&lfoSet);
         addAndMakeVisible(&mixer);
         addAndMakeVisible(&envSet);
+        addAndMakeVisible(&filter);
     }
     ~ModParentComponent() override;
     void paint (juce::Graphics&) override;
@@ -42,8 +45,10 @@ public:
         lfoSet.attachAllToTree(state);
         envSet.attachAllToTree(state);
         mixer.attachToTree(state);
+        filter.attachToTree(state);
     }
     void sliderValueChanged(juce::Slider* slider) override;
+    FilterControls filter;
     OscillatorSet oscSet;
     TabbedLfoComponent lfoSet;
     TabbedEnvelopeComponent envSet;

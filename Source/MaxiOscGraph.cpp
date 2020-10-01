@@ -100,14 +100,17 @@ void OscillatorGraph::paint(juce::Graphics &g)
     juce::Path trace;
     trace.preallocateSpace((3 * pointsPerFrame) + 7);
     float yOffset = area.getHeight() / 2.0f;
-    for(int i = 0; i < pointsPerFrame; ++i)
+    if(yValues.size() == pointsPerFrame)
     {
-        float newX = xDelta * i;
-        float newY = (yValues[i] * gain * graphLevel) + yOffset;
-        if(i == 0)
-            trace.startNewSubPath(newX, newY);
-        else
-            trace.lineTo(newX, newY);
+        for(int i = 0; i < pointsPerFrame; ++i)
+        {
+            float newX = xDelta * i;
+            float newY = (yValues[i] * gain * graphLevel) + yOffset;
+            if(i == 0)
+                trace.startNewSubPath(newX, newY);
+            else
+                trace.lineTo(newX, newY);
+        }
     }
     trace.lineTo(area.getWidth(), area.getHeight());
     trace.lineTo(area.getX(), area.getHeight());

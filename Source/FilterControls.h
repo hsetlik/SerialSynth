@@ -16,10 +16,25 @@ class FilterControls : public juce::Component
 {
 public:
     //functions
-    FilterControls();
+    FilterControls(SpectrumTable1AudioProcessor& proc, juce::Slider::Listener* lstnr) :
+    mixKnob("filterMixDest", false, 1.0f, 20000.0f, 1, lstnr, proc, juce::Slider::Rotary),
+    resKnob("resDest", false, 1.0f, 100.0f, 1, lstnr, proc, juce::Slider::Rotary),
+    cutoffKnob("cutoffDest", false, 0.0f, 1.0f, 1, lstnr, proc, juce::Slider::Rotary)
+    {
+        addAndMakeVisible(cutoffKnob);
+        addAndMakeVisible(resKnob);
+        addAndMakeVisible(mixKnob);
+    }
     ~FilterControls() {}
+    void attachToTree(juce::AudioProcessorValueTreeState* tree);
+    void resized() override;
     //data
-    MultiModDestination cutoffKnob;
-    MultiModDestination resonanceKnob;
     MultiModDestination mixKnob;
+    MultiModDestination resKnob;
+    MultiModDestination cutoffKnob;
+    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mixAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> resAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> cutoffAttach;
+    
 };

@@ -81,6 +81,14 @@ juce::AudioProcessorValueTreeState::ParameterLayout createLayout()
         layout.add(std::make_unique<juce::AudioParameterBool>(p1SnapId, p1SnapName, false));
         layout.add(std::make_unique<juce::AudioParameterBool>(p0SnapId, p0SnapName, false));
     }
+    auto cutoffId = "cutoffParam";
+    auto cutoffName = "Filter Cutoff";
+    juce::NormalisableRange<float> cutoffRange(1.0f, 20000.0f, 0.5f, 0.3);
+    cutoffRange.setSkewForCentre(6500.0f);
+    layout.add(std::make_unique<juce::AudioParameterFloat>(cutoffId, cutoffName, cutoffRange, 20000.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("resParam", "Filter Resonance", 1.0f, 100.0f, 1.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("filterMixParam", "Filter Wet/Dry", 0.0f, 1.0f, 0.0f));
+    
     auto masterLevelId = "masterLevelParam";
     auto masterLevelName = "Master Level";
     layout.add(std::make_unique<juce::AudioParameterFloat>(masterLevelId, masterLevelName, 0.0, 1.0, 0.6));

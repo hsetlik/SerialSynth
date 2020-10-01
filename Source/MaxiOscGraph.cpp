@@ -75,6 +75,7 @@ MaxiOscGraph::MaxiOscGraph(GraphValueSet* valueSet) : values(valueSet)
     {
         waveDataPoints[i] = (values->pointsToDisplay[i]);
     }
+    oscTrace.preallocateSpace(16);
     startTimerHz(frameRate);
 }
 
@@ -103,7 +104,7 @@ void MaxiOscGraph::paint (juce::Graphics& g)
         {
             float newX = xDelta * i;
             float newY = (waveDataPoints[i] * amplitude) + yOffest;
-            if(i == 0 && newY)
+            if(i == 0 && newY > 0)
             {
                 oscTrace.startNewSubPath(newX, newY);
             }

@@ -58,18 +58,26 @@ bool MultiModDestination::isInterestedInDragSource(const juce::DragAndDropTarget
 
 void MultiModDestination::resized()
 {
-    int longDim;
-    destSliderIsVertical ? (longDim = getHeight()) : (longDim = getWidth());
-    int n = longDim / 16;
-    if(destSliderIsVertical)
+    int n;
+    if(paramSlider.getSliderStyle() == juce::Slider::LinearVertical)
+        n = getHeight() / 16;
+    else if(paramSlider.getSliderStyle() == juce::Slider::LinearHorizontal)
+        n = getWidth() / 16;
+    else
+        n = getHeight() / 16;
+    if(paramSlider.getSliderStyle() == juce::Slider::LinearVertical)
     {
         paramSlider.setBounds(0, 0, 2.5 * n, 10 * n);
         depthSliderSet.setBounds(2.5 * n,  2 * n, 1.5 * n, 8 * n);
     }
-    else
+    else if(paramSlider.getSliderStyle() == juce::Slider::LinearHorizontal)
     {
         paramSlider.setBounds(0, 0, 10 * n, 2.5 * n);
         depthSliderSet.setBounds(0, 2.5 * n, 8 * n, 1.5 * n);
     }
-    
+    else if(paramSlider.getSliderStyle() == juce::Slider::Rotary)
+    {
+        paramSlider.setBounds(0, 0, 8 * n, 10 * n);
+        depthSliderSet.setBounds(0, 10 * n, 8 * n, 1.5 * n);
+    }
 }

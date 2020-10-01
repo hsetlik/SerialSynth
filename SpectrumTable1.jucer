@@ -33,6 +33,10 @@
               file="Source/MultiModDestination.h"/>
       </GROUP>
       <GROUP id="{4AD4ACAA-F15F-8D2D-5B7D-DDE745D75487}" name="SoundProcessing">
+        <FILE id="w2NYBy" name="FilterProcessor.cpp" compile="1" resource="0"
+              file="Source/FilterProcessor.cpp"/>
+        <FILE id="EsVbUl" name="FilterProcessor.h" compile="0" resource="0"
+              file="Source/FilterProcessor.h"/>
         <FILE id="skfGFG" name="MixProcessor.h" compile="0" resource="0" file="Source/MixProcessor.h"/>
         <FILE id="scCsoT" name="SpectrumOscillator.cpp" compile="1" resource="0"
               file="Source/SpectrumOscillator.cpp"/>
@@ -42,6 +46,10 @@
               file="Source/SpectrumSynthVoice.h"/>
       </GROUP>
       <GROUP id="{F2BF066C-B7BA-F8BC-0C53-301FB7CC2209}" name="ChildComponents">
+        <FILE id="ZL4i33" name="FilterControls.cpp" compile="1" resource="0"
+              file="Source/FilterControls.cpp"/>
+        <FILE id="Rhik2n" name="FilterControls.h" compile="0" resource="0"
+              file="Source/FilterControls.h"/>
         <FILE id="zXj9Za" name="MixerComponent.cpp" compile="1" resource="0"
               file="Source/MixerComponent.cpp"/>
         <FILE id="OixbTS" name="MixerComponent.h" compile="0" resource="0"

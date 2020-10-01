@@ -69,7 +69,7 @@ class MultiModDestination : public juce::DragAndDropTarget, public juce::Compone
 {
 public:
     //functions
-    MultiModDestination(juce::String idStr, bool isVertical, float min, float max, int index, juce::Slider::Listener* lstnr, SpectrumTable1AudioProcessor& proc) :
+    MultiModDestination(juce::String idStr, bool isVertical, float min, float max, int index, juce::Slider::Listener* lstnr, SpectrumTable1AudioProcessor& proc, juce::Slider::SliderStyle mainStyle) :
     audioProcessor(proc),
     destSliderIsVertical(isVertical),
     paramMin(min),
@@ -82,7 +82,11 @@ public:
         addAndMakeVisible(&paramSlider);
         addAndMakeVisible(&depthSliderSet);
         auto sliderStyle = (isVertical) ? (juce::Slider::LinearVertical) : (juce::Slider::LinearHorizontal);
-        paramSlider.setSliderStyle(sliderStyle);
+        paramSlider.setSliderStyle(mainStyle);
+        if(isVertical)
+            paramSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 15);
+        else
+            paramSlider.setTextBoxStyle(juce::Slider::TextBoxLeft, false, 40, 15);
         paramSlider.setRange(paramMin, paramMax);
         
     }

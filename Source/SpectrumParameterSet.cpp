@@ -13,7 +13,6 @@
 
 //==============================================================================
 SpectrumParameterSet::SpectrumParameterSet(int index,
-                                           GraphValueSet* values,
                                            juce::DragAndDropContainer* container,
                                            SpectrumTable1AudioProcessor& proc,
                                            juce::Slider::Listener* lstnr) :
@@ -21,7 +20,6 @@ nSlider("nDest", false, 1.0f, 40.0f, index, lstnr, proc, juce::Slider::LinearHor
 p0Slider("p0Dest", false, 1.0f, 15.0f, index, lstnr, proc, juce::Slider::LinearHorizontal),
 p1Slider("p1Dest" , false, 1.0f, 15.0f, index, lstnr, proc, juce::Slider::LinearHorizontal),
 detuneSlider("detuneDest" , true, -1.0f, 1.0f, index, lstnr, proc, juce::Slider::LinearVertical),
-graph(values),
 envSliders(index),
 parentContainer(container),
 oscIndex(index)
@@ -32,7 +30,6 @@ oscIndex(index)
     addAndMakeVisible(&p1Slider);
     addAndMakeVisible(&algButton);
     addAndMakeVisible(&detuneSlider);
-    addAndMakeVisible(&graph);
     algButton.setButtonText("Compund Mode");
     algButton.setClickingTogglesState(true);
     
@@ -173,6 +170,5 @@ void SpectrumParameterSet::resized()
     p0SnapButton.setBounds(l, 3 * l, 1.5 * l, l);
     detuneSlider.setBounds(10 * l, 2 * l, 1.6 * l,  6 * l);
     algButton.setBounds(l, 7 * l, 4 * l, l);
-    graph.setBounds(l * 13, l, 10 * l, 10 * l);
     envSliders.setBounds(l, 8 * l, 12 * l, 6 * l);
 }

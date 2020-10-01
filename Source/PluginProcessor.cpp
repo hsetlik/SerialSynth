@@ -144,11 +144,6 @@ SpectrumTable1AudioProcessor::SpectrumTable1AudioProcessor()
     }
     synth.clearSounds();
     synth.addSound(new SpectrumSound());
-    //filling up the source with empty buffers so we have a line at the beginning
-    for(int i = 0; i < 3; ++i)
-    {
-        allGraphValues.add(new GraphValueSet(40));
-    }
 }
 
 SpectrumTable1AudioProcessor::~SpectrumTable1AudioProcessor()
@@ -312,6 +307,7 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     }
     buffer.clear();
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    /*
     float masterLevel = buffer.getRMSLevel(0, 0, buffer.getNumSamples());
     for(int i = 0; i < 3; ++i)
     {
@@ -333,6 +329,7 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         allGraphValues[i]->setMasterVol(masterLevel);
         allGraphValues[i]->setDisplayPoints();
     }
+    */
 }
 
 //==============================================================================
@@ -387,7 +384,6 @@ void SpectrumTable1AudioProcessor::addVoiceModulation(juce::String sourceId, juc
 
 void SpectrumTable1AudioProcessor::removeVoiceModulation(juce::String sourceId, juce::String destId, int index, juce::Component* slider)
 {
-    MultiDepthSlider* mSlider = dynamic_cast<MultiDepthSlider*>(slider);
     for(int voice = 0; voice < synth.getNumVoices(); ++voice)
     {
     SpectrumVoice* currentVoice = dynamic_cast<SpectrumVoice*>(synth.getVoice(voice));

@@ -60,7 +60,7 @@ public:
     
     SpectrumVoice* thisVoice;
     juce::AudioProcessorValueTreeState tree;
-    juce::OwnedArray<GraphValueSet> allGraphValues;
+    //juce::OwnedArray<GraphValueSet> allGraphValues;
     //GraphValueSet graphValues1;
 private:
     juce::Synthesiser synth;

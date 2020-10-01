@@ -432,7 +432,7 @@ public:
                 newPreEnv *= mixer.getOscLevel(g);
                 sum += (allOscs[g]->envelope1.adsr(newPreEnv, allOscs[g]->envelope1.trigger));
             }
-            newSample = sum / 3.0f;
+            float newSample = sum / 3.0f;
             newSample *= mixer.masterLevel;
             for(int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
             {
@@ -447,7 +447,6 @@ public:
     {
         
     }
-    float newSample = 0.0f;
     juce::OwnedArray<HarmonicOscillator> allOscs;
     VoiceModGenerators allGens;
     MixerProcessor mixer;

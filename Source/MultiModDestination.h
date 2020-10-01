@@ -51,15 +51,15 @@ public:
     }
     void addDepthSlider(juce::String sourceId);
     void mouseDown(const juce::MouseEvent &e) override;
-    int oscIndex;
-    juce::Slider::Listener* listener;
     //data
     bool parentIsVertical;
-    SpectrumTable1AudioProcessor& audioProcessor;
-    juce::OwnedArray<juce::String> sourceIds;
+    int oscIndex;
+    juce::Slider::Listener* listener;
     juce::String destId;
+    juce::OwnedArray<juce::String> sourceIds;
     juce::OwnedArray<DepthSlider> depthSliders;
     juce::Colour tabBkgnd;
+    SpectrumTable1AudioProcessor& audioProcessor;
 private:
     ColorCreator color;
 };
@@ -71,17 +71,17 @@ public:
     //functions
     MultiModDestination(juce::String idStr, bool isVertical, float min, float max, int index, juce::Slider::Listener* lstnr, SpectrumTable1AudioProcessor& proc, juce::Slider::SliderStyle mainStyle) :
     audioProcessor(proc),
+    listener(lstnr),
+    depthSliderSet(idStr, isVertical, index, lstnr, proc),
     destSliderIsVertical(isVertical),
     paramMin(min),
     paramMax(max),
-    depthSliderSet(idStr, isVertical, index, lstnr, proc),
     destId(idStr),
-    oscIndex(index),
-    listener(lstnr)
+    oscIndex(index)
     {
         addAndMakeVisible(&paramSlider);
         addAndMakeVisible(&depthSliderSet);
-        auto sliderStyle = (isVertical) ? (juce::Slider::LinearVertical) : (juce::Slider::LinearHorizontal);
+        //auto sliderStyle = (isVertical) ? (juce::Slider::LinearVertical) : (juce::Slider::LinearHorizontal);
         paramSlider.setSliderStyle(mainStyle);
         if(isVertical)
             paramSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 15);

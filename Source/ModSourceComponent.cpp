@@ -121,7 +121,9 @@ void TabbedLfoComponent::attachAllToTree(juce::AudioProcessorValueTreeState *tar
 }
 
 EnvelopeComponent::EnvelopeComponent(juce::String desc, juce::DragAndDropContainer* parentContainer, int index, juce::Colour modSourceColor) :
-modSource(desc, parentContainer), envIndex(index), graph(&aSlider, &dSlider, &sSlider, &rSlider)
+modSource(desc, parentContainer),
+graph(&aSlider, &dSlider, &sSlider, &rSlider),
+envIndex(index)
 {
     addAndMakeVisible(&modSource);
     modSource.changeCenterColor(modSourceColor);

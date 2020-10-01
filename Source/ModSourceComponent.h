@@ -115,8 +115,8 @@ public:
         rAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, releaseId, rSlider));
     }
     //data
-    AdsrGraph graph;
     ModSourceComponent modSource;
+    AdsrGraph graph;
     int envIndex;
     juce::Slider aSlider;
     juce::Slider dSlider;

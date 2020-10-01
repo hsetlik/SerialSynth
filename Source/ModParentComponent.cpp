@@ -31,23 +31,6 @@ void ModParentComponent::resized()
     mixer.setBounds(getWidth() - (5 * n), 0, 5 * n, 18 * n);
 }
 
-juce::DragAndDropTarget::SourceDetails ModParentComponent::getActiveSourceDetails(ModDestination* dest)
-{
-    auto activeDesc = getCurrentDragDescription();
-    juce::Point<int> relativePoint = dest->getMouseXYRelative();
-    juce::Component* activeComp;
-    if(activeDesc == "lfo0Comp")
-    {
-        //activeComp = &lfo0;
-    }
-    else
-    {
-        activeComp = nullptr;
-    }
-    auto details = juce::DragAndDropTarget::SourceDetails(activeDesc, activeComp, relativePoint);
-    return details;
-}
-
 void ModParentComponent::sliderValueChanged(juce::Slider* slider)
 {
     DepthSlider* dSlider = dynamic_cast<DepthSlider*>(slider);

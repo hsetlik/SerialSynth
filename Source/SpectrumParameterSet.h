@@ -22,7 +22,7 @@
 class SpectrumParameterSet  : public juce::Component
 {
 public:
-    SpectrumParameterSet(int oscillatorIndex, GraphValueSet* values, juce::DragAndDropContainer* container, SpectrumTable1AudioProcessor& proc, juce::Slider::Listener* lstnr);
+    SpectrumParameterSet(int oscillatorIndex, juce::DragAndDropContainer* container, SpectrumTable1AudioProcessor& proc, juce::Slider::Listener* lstnr);
     ~SpectrumParameterSet() override;
     void attachToTree(juce::AudioProcessorValueTreeState* pTree);
     void paint (juce::Graphics&) override;
@@ -47,7 +47,6 @@ public:
     
     juce::Slider::Listener* listener;
     
-    MaxiOscGraph graph;
     EnvelopeSliderSet envSliders;
     juce::DragAndDropContainer* parentContainer;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> nAttach;

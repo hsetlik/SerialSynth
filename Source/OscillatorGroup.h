@@ -25,9 +25,9 @@ public:
     OscillatorSet(SpectrumTable1AudioProcessor& proc, juce::DragAndDropContainer* container, juce::Slider::Listener* lstnr) :
     juce::TabbedComponent(juce::TabbedButtonBar::TabsAtTop),
     processor(proc),
-    pSet1(0, &proc.allGraphValues[0], container, proc, lstnr),
-    pSet2(1, &proc.allGraphValues[1], container, proc, lstnr),
-    pSet3(2, &proc.allGraphValues[2], container, proc, lstnr)
+    pSet1(0, proc.allGraphValues[0], container, proc, lstnr),
+    pSet2(1, proc.allGraphValues[1], container, proc, lstnr),
+    pSet3(2, proc.allGraphValues[2], container, proc, lstnr)
     {
         setBoundsRelative(0.0f, 0.0f, 1.0f, 1.0f);
         setTabBarDepth(25);

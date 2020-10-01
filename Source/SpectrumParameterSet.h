@@ -39,6 +39,8 @@ public:
     MultiModDestination p0Slider;
     MultiModDestination p1Slider;
     
+    MultiModDestination detuneSlider;
+    
     //TODO
     //-detune slider and modDest
     //-pan slider and modDest
@@ -51,6 +53,7 @@ public:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> nAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> p0Attach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> p1Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> detuneAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> algAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> p1SnapAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> p0SnapAttach;

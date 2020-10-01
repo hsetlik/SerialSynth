@@ -14,6 +14,7 @@ HarmonicOscillator::HarmonicOscillator(int maxOvertones, int index, VoiceModGene
 p1ModProc("p1Dest", index, gens),
 p0ModProc("p0Dest", index, gens),
 nModProc("nDest", index, gens),
+detuneProc("detuneDest", index, gens),
 gens(genSet),
 maxHarmonicCount(maxOvertones)
 {
@@ -55,14 +56,27 @@ void HarmonicOscillator::applyModulations()
     }
     if(nModProc.sources.size() != 0)
     {
-    auto nDelta = nModProc.getParameterDelta();
-    auto nMaxIncrease = 40.0 - currentHarmonicCount;
-    auto nMaxDecrease = currentHarmonicCount;
-    if(nDelta > 0)
-        currentHarmonicCount += (nMaxIncrease * nDelta);
-    else
-        currentHarmonicCount += (nMaxDecrease * nDelta);
+        auto nDelta = nModProc.getParameterDelta();
+        auto nMaxIncrease = 40.0 - currentHarmonicCount;
+        auto nMaxDecrease = currentHarmonicCount;
+        if(nDelta > 0)
+            currentHarmonicCount += (nMaxIncrease * nDelta);
+        else
+            currentHarmonicCount += (nMaxDecrease * nDelta);
     }
+    if(detuneProc.sources.size() != 0)
+    {
+        auto detuneDelta = detuneProc.getParameterDelta();
+        auto maxHz = juce::MidiMessage::getMidiNoteInHertz(lastMidiNote + 1);
+        auto minHz = juce::MidiMessage::getMidiNoteInHertz(lastMidiNote - 1);
+        auto maxHzIncrease = maxHz - fundamental;
+        auto maxHzDecreace = fundamental - minHz;
+        if(detuneDelta > 0)
+            fundamental += (maxHzIncrease * detuneDelta);
+        else
+            fundamental -= (maxHzDecreace * detuneDelta);
+    }
+    
     
     
 }

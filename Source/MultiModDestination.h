@@ -39,7 +39,7 @@ class MultiDepthSlider : public juce::TabbedComponent
 public:
     //functions
     MultiDepthSlider(juce::String dest, bool isVertical, int index, juce::Slider::Listener* lstnr, SpectrumTable1AudioProcessor& proc) :
-    juce::TabbedComponent( (isVertical) ? juce::TabbedButtonBar::TabsAtRight : juce::TabbedButtonBar::TabsAtBottom),
+    juce::TabbedComponent( (isVertical) ? juce::TabbedButtonBar::TabsAtLeft : juce::TabbedButtonBar::TabsAtBottom),
     parentIsVertical(isVertical),
     oscIndex(index),
     listener(lstnr),

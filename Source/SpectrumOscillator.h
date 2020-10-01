@@ -60,6 +60,8 @@ public:
     ModDestProcessor p1ModProc;
     ModDestProcessor p0ModProc;
     ModDestProcessor nModProc;
+    ModDestProcessor detuneProc;
+    float currentDetune;
     float currentP1;
     float currentP0;
     float currentHarmonicCount;
@@ -69,6 +71,7 @@ public:
     bool p0Snap = false;
     maxiEnv envelope1;
     maxiEnv envelope2;
+    int lastMidiNote = 0;
 private:
     float fundamental = 0.0f;
     

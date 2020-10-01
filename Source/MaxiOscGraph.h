@@ -52,9 +52,10 @@ public:
     }
     void setDisplayPoints();
     //data
+    juce::OwnedArray<HarmonicData> ownedHarmonics;
     std::vector<HarmonicData> harmonicData;
     std::vector<float> fAmplitudes;
-    std::vector<float> pointsToDisplay;
+    float pointsToDisplay[256];
     std::vector<float> angleDeltas;
     std::vector<float> currentAngles;
     
@@ -80,7 +81,8 @@ public:
     }
     void paint (juce::Graphics&) override;
 private:
-    std::vector<float> waveDataPoints;
+    juce::Path oscTrace;
+    float waveDataPoints[256];
     float amplitude = 100.0f;
     GraphValueSet* values;
     juce::Colour backgroundColor = juce::Colours::darkgrey;

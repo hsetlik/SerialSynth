@@ -14,8 +14,8 @@ GraphValueSet::GraphValueSet(int maxOvertones)
 {
     for(int i = 0; i < maxOvertones; ++i)
     {
-        std::unique_ptr<HarmonicData> newHarmonic(new HarmonicData(i));
-        harmonicData.push_back(*newHarmonic);
+        std::unique_ptr<HarmonicData> newData(new HarmonicData(i));
+        harmonicData.push_back(*newData);
         //pumping the correct amount of zeroes into these vectors so we have a straight line at the beginning;
         angleDeltas.push_back(0.0f);
         currentAngles.push_back(0.0f);
@@ -23,7 +23,7 @@ GraphValueSet::GraphValueSet(int maxOvertones)
     }
     for(int i = 0; i < pointsPerFrame; ++i)
     {
-        pointsToDisplay.push_back(0.0f);
+        pointsToDisplay[i] = 0.0f;
     }
 }
 
@@ -71,7 +71,10 @@ void GraphValueSet::setDisplayPoints()
 //==============================================================================
 MaxiOscGraph::MaxiOscGraph(GraphValueSet* valueSet) : values(valueSet)
 {
-    waveDataPoints = std::vector<float>(values->pointsToDisplay);
+    for(int i = 0; i < 256; ++i)
+    {
+        waveDataPoints[i] = (values->pointsToDisplay[i]);
+    }
     startTimerHz(frameRate);
 }
 
@@ -81,13 +84,17 @@ MaxiOscGraph::~MaxiOscGraph()
 
 void MaxiOscGraph::paint (juce::Graphics& g)
 {
-    waveDataPoints = std::vector<float>(values->pointsToDisplay);
+    for(int i = 0; i < 256; ++i)
+    {
+        waveDataPoints[i] = (values->pointsToDisplay[i]);
+    }
+    
     g.setColour(backgroundColor);
     g.fillAll();
     g.setColour(traceColor);
-    if(waveDataPoints.size() != 0)
+    if(true)
     {
-        juce::Path oscTrace;
+        oscTrace.clear();
         juce::Rectangle<float> area = getLocalBounds().toFloat();
         oscTrace.scaleToFit(area.getX(), area.getY(), area.getWidth(), area.getHeight(), true);
         auto yOffest = area.getHeight() / 2;
@@ -96,7 +103,7 @@ void MaxiOscGraph::paint (juce::Graphics& g)
         {
             float newX = xDelta * i;
             float newY = (waveDataPoints[i] * amplitude) + yOffest;
-            if(i == 0)
+            if(i == 0 && newY)
             {
                 oscTrace.startNewSubPath(newX, newY);
             }

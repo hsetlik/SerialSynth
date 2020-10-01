@@ -20,6 +20,7 @@ SpectrumParameterSet::SpectrumParameterSet(int index,
 nSlider("nDest", false, 1.0f, 40.0f, index, lstnr, proc),
 p0Slider("p0Dest", false, 1.0f, 15.0f, index, lstnr, proc),
 p1Slider("p1Dest" , false, 1.0f, 15.0f, index, lstnr, proc),
+detuneSlider("detuneDest" , true, -1.0f, 1.0f, index, lstnr, proc),
 graph(values),
 envSliders(index),
 parentContainer(container),
@@ -30,6 +31,7 @@ oscIndex(index)
     addAndMakeVisible(&p0Slider);
     addAndMakeVisible(&p1Slider);
     addAndMakeVisible(&algButton);
+    addAndMakeVisible(&detuneSlider);
     addAndMakeVisible(&graph);
     algButton.setButtonText("Compund Mode");
     algButton.setClickingTogglesState(true);
@@ -96,6 +98,9 @@ juce::AudioProcessorParameterGroup SpectrumParameterSet::createParamGroup()
     juce::String nDepthId = "nDepthParam" + iStr;
     juce::String nDepthName = "Oscillator " + iStr + " harmonic count mod depth";
     
+    auto detuneId = "detuneParam" + iStr;
+    auto detuneName = "Oscillator " + iStr + " detune";
+    
     newGroup.addChild(std::make_unique<juce::AudioParameterFloat>(p0DepthId, p0DepthName, 0.0, 0.0, 1.0));
     newGroup.addChild(std::make_unique<juce::AudioParameterFloat>(p1DepthId, p1DepthName, 0.0, 0.0, 1.0));
     newGroup.addChild(std::make_unique<juce::AudioParameterFloat>(nDepthId, nDepthName, 0.0, 0.0, 1.0));
@@ -148,7 +153,9 @@ void SpectrumParameterSet::attachToTree(juce::AudioProcessorValueTreeState* pTre
     rAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*pTree,
                                                                            "releaseParam" + iStr,
                                                                                   envSliders.rSlider));
-    
+    detuneAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*pTree,
+                                                                           "detuneParam" + iStr,
+                                                                                  detuneSlider.paramSlider));
 }
 void SpectrumParameterSet::paint (juce::Graphics& g)
 {
@@ -162,8 +169,9 @@ void SpectrumParameterSet::resized()
     nSlider.setBounds(3 * l, l, 6 * l, l * 1.6);
     p0Slider.setBounds(3 * l, 3 * l, 6 * l, l * 1.6);
     p1Slider.setBounds(3 * l, 5 * l, 6 * l, l * 1.6);
-    p1SnapButton.setBounds(11 * l, 5 * l, 1.5 * l, l);
-    p0SnapButton.setBounds(11 * l, 3 * l, 1.5 * l, l);
+    p1SnapButton.setBounds(l, 5 * l, 1.5 * l, l);
+    p0SnapButton.setBounds(l, 3 * l, 1.5 * l, l);
+    detuneSlider.setBounds(10 * l, 2 * l, 1.6 * l,  6 * l);
     algButton.setBounds(l, 7 * l, 4 * l, l);
     graph.setBounds(l * 13, l, 10 * l, 10 * l);
     envSliders.setBounds(l, 8 * l, 12 * l, 6 * l);

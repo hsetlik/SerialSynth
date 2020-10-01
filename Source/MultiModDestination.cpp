@@ -64,7 +64,7 @@ void MultiModDestination::resized()
     if(destSliderIsVertical)
     {
         paramSlider.setBounds(0, 0, 2.5 * n, 10 * n);
-        depthSliderSet.setBounds(0, 10 * n, 1.5 * n, 8 * n);
+        depthSliderSet.setBounds(2.5 * n,  2 * n, 1.5 * n, 8 * n);
     }
     else
     {

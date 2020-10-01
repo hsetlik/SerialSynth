@@ -337,6 +337,11 @@ public:
         HarmonicOscillator* thisOsc = allOscs[index];
         thisOsc->secondAlgOn = (bool)(*value);
     }
+    void setDetune(std::atomic<float>* value, int index)
+    {
+        HarmonicOscillator* thisOsc = allOscs[index];
+        thisOsc->currentDetune = *value;
+    }
     void setAttack(std::atomic<float>* value, int index)
     {
         HarmonicOscillator* thisOsc = allOscs[index];
@@ -372,7 +377,7 @@ public:
         {
             allOscs[i]->setFundamental(newPitch);
             allOscs[i]->envelope1.trigger = 1;
-            
+            allOscs[i]->lastMidiNote = midiNoteNumber;
         }
         allGens.allTriggersOn();
     }

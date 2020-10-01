@@ -48,6 +48,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout createLayout()
         juce::String releaseId = "modEnvReleaseParam" + iStr;
         juce::String releaseName = "Envelope " + iStr + " release";
         
+        juce::String detuneId = "detuneParam" + iStr;
+        juce::String detuneName = "Oscillator" + iStr + " detune";
+        
         juce::NormalisableRange<float> attackRange(1.0f, 20000.0f, 0.01f, 0.3f);
         attackRange.setSkewForCentre(250.0f);
         layout.add(std::make_unique<juce::AudioParameterFloat>(attackId, attackName, attackRange, 20.0f));
@@ -68,6 +71,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout createLayout()
         layout.add(std::make_unique<juce::AudioParameterFloat>(dId, dName, 1.0, 15000.0, 65.0));
         layout.add(std::make_unique<juce::AudioParameterFloat>(sId, sName, 0.0, 1.0, 0.6));
         layout.add(std::make_unique<juce::AudioParameterFloat>(rId, rName, 1.0, 15000.0, 100.0));
+        
+        layout.add(std::make_unique<juce::AudioParameterFloat>(detuneId, detuneName, -1.0, 1.0, 0.0));
         
         layout.add(std::make_unique<juce::AudioParameterFloat>(nId, nName, 1.0, 40.0, 6.0));
         layout.add(std::make_unique<juce::AudioParameterFloat>(p0Id, p0Name, 0.0, 15.0, 1.0));
@@ -142,8 +147,7 @@ SpectrumTable1AudioProcessor::SpectrumTable1AudioProcessor()
     //filling up the source with empty buffers so we have a line at the beginning
     for(int i = 0; i < 3; ++i)
     {
-        std::unique_ptr<GraphValueSet> newValSet(new GraphValueSet(40));
-        allGraphValues.push_back(*newValSet);
+        allGraphValues.add(new GraphValueSet(40));
     }
 }
 
@@ -270,6 +274,7 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
                 juce::String p1Name = "p1Param" + nStr;
                 juce::String algName = "algParam" + nStr;
                 juce::String p1SnapName = "p1SnapParam" + nStr;
+                juce::String detuneId = "detuneParam" + nStr;
                 
                 juce::String oscLevelName = "osc" + nStr + "LevelParam";
                 
@@ -321,12 +326,12 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         float oscP1 = thisVoice->allOscs[i]->currentP1;
         bool oscSecondAlg = thisVoice->allOscs[i]->secondAlgOn;
         
-        allGraphValues[i].setNumHarmonics(oscN);
-        allGraphValues[i].setP0(oscP0);
-        allGraphValues[i].setP1(oscP1);
-        allGraphValues[i].setAlgSelection(oscSecondAlg);
-        allGraphValues[i].setMasterVol(masterLevel);
-        allGraphValues[i].setDisplayPoints();
+        allGraphValues[i]->setNumHarmonics(oscN);
+        allGraphValues[i]->setP0(oscP0);
+        allGraphValues[i]->setP1(oscP1);
+        allGraphValues[i]->setAlgSelection(oscSecondAlg);
+        allGraphValues[i]->setMasterVol(masterLevel);
+        allGraphValues[i]->setDisplayPoints();
     }
 }
 
@@ -371,6 +376,8 @@ void SpectrumTable1AudioProcessor::addVoiceModulation(juce::String sourceId, juc
             currentDest = &currentOsc->p1ModProc;
         else if(destId == "nDest")
             currentDest = &currentOsc->nModProc;
+        else if(destId == "detuneDest")
+            currentDest = &currentOsc->detuneProc;
         else
             currentDest = nullptr;
     //ModDestProcessor.addSource(sourceId)
@@ -394,6 +401,8 @@ void SpectrumTable1AudioProcessor::removeVoiceModulation(juce::String sourceId, 
             currentDest = &currentOsc->p1ModProc;
         else if(destId == "nDest")
             currentDest = &currentOsc->nModProc;
+        else if(destId == "detuneDest")
+            currentDest = &currentOsc->detuneProc;
         else
             currentDest = nullptr;
     currentDest->removeSource(sourceId);
@@ -442,6 +451,18 @@ void SpectrumTable1AudioProcessor::setModDepth(juce::String sourceId, juce::Stri
                         if(sourceId == checkAgainst)
                         {
                             currentVoice->allOscs[oscInd]->nModProc.sources[n]->setDepth(value);
+                        }
+                    }
+                    
+                }
+                else if(destId == "detuneDest")
+                {
+                    for(int n = 0; n < currentVoice->allOscs[oscInd]->detuneProc.sources.size(); ++n)
+                    {
+                        juce::String checkAgainst = currentVoice->allOscs[oscInd]->detuneProc.sources[n]->sourceId;
+                        if(sourceId == checkAgainst)
+                        {
+                            currentVoice->allOscs[oscInd]->detuneProc.sources[n]->setDepth(value);
                         }
                     }
                     

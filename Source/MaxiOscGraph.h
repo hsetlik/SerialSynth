@@ -18,75 +18,83 @@
 //==============================================================================
 /*
 */
-const int frameRate = 24;
 
-class GraphValueSet
+class OscillatorMonitor
 {
 public:
-    //functions
-    GraphValueSet(int maxOvertones);
-    ~GraphValueSet() {}
-    void setNumHarmonics(float value)
+    OscillatorMonitor(int index): oscIndex(index)
     {
-        currentNumHarmonics = value;
+        
     }
-    void setP0(float value)
+    ~OscillatorMonitor() {}
+    void setAlg2(bool value)
     {
-        currentP0 = value;
+        alg2 = value;
     }
-    void setP1(float value)
+    void setP0(float* value)
     {
-        currentP1 = value;
+        lastP0 = *value;
     }
-    void setAlgSelection(bool value)
+    void setP1(float* value)
     {
-        secondAlgOn = value;
+        lastP1 = *value;
     }
-    void setPitch(float pitch)
+    void setN(float* value)
     {
-        currentFundamental = pitch;
+        lastN = *value;
     }
-    void setMasterVol(float amp)
+    void setLevel(float value)
     {
-        masterAmplitude = amp;
+        lastLevel = value;
     }
-    void setDisplayPoints();
-    //data
-    juce::OwnedArray<HarmonicData> ownedHarmonics;
-    std::vector<HarmonicData> harmonicData;
-    std::vector<float> fAmplitudes;
-    float pointsToDisplay[256];
-    std::vector<float> angleDeltas;
-    std::vector<float> currentAngles;
-    
-private:
-    float masterAmplitude = 1.0f;
-    float currentFundamental = 440.0f;
-    int currentNumHarmonics = 0;
-    bool secondAlgOn = false;
-    float currentP0 = 1;
-    float currentP1 = 1;
+    int oscIndex;
+    float lastP0 = 1.0f;
+    float lastP1 = 1.0f;
+    float lastN = 6.0f;
+    float lastLevel;
+    bool alg2 = false;
 };
 
 
+const int frameRate = 24;
 
-class MaxiOscGraph  : public juce::Component, public juce::Timer
+
+class OscillatorGraph : public juce::Component, public juce::Timer
 {
 public:
-    MaxiOscGraph(GraphValueSet* valueSet);
-    ~MaxiOscGraph() override;
-    void timerCallback() override
+    //functions
+    OscillatorGraph(OscillatorMonitor* osc, int index);
+    ~OscillatorGraph() {}
+    void timerCallback() override;
+    void paint(juce::Graphics& g) override;
+    void calculateYValues();
+    void updateValues()
     {
-        repaint();
+        graphP0 = source->lastP0;
+        graphP1 = source->lastP1;
+        graphN = source->lastN;
+        graphAlg2 = source->alg2;
+        graphLevel = source->lastLevel;
     }
-    void paint (juce::Graphics&) override;
+    //data
 private:
-    juce::Path oscTrace;
-    float waveDataPoints[256];
-    float amplitude = 100.0f;
-    GraphValueSet* values;
-    juce::Colour backgroundColor = juce::Colours::darkgrey;
-    juce::Colour traceColor = juce::Colours::orange;
+    juce::Array<float> yValues;
+    juce::Array<float> currentAngles;
+    juce::Array<float> angleDeltas;
+    juce::Array<float> amplitudes;
+    const int cyclesPerFrame = 3;
+    const int frameRate = 24;
+    const int pointsPerFrame = 200;
+    const int maxHarmonics = 40;
+    const float gain = 100.0f;
+    float graphP0;
+    float graphP1;
+    float graphN;
+    float graphLevel;
+    bool graphAlg2;
     ColorCreator color;
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MaxiOscGraph)
+    juce::Colour background;
+    juce::Colour traceColor;
+    int oscIndex;
+    OscillatorMonitor* source;
 };

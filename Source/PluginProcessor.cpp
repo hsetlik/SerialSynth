@@ -144,6 +144,10 @@ SpectrumTable1AudioProcessor::SpectrumTable1AudioProcessor()
     }
     synth.clearSounds();
     synth.addSound(new SpectrumSound());
+    for(int i = 0; i < 3; ++i)
+    {
+        monitors.add(new OscillatorMonitor(i));
+    }
 }
 
 SpectrumTable1AudioProcessor::~SpectrumTable1AudioProcessor()
@@ -253,6 +257,9 @@ bool SpectrumTable1AudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 
 void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    SpectrumVoice* voiceToDraw;
+    bool activeVoice = false;
+    
     for(int i = 0; i < synth.getNumVoices(); ++i)
     {
         if((thisVoice =  dynamic_cast<SpectrumVoice*>(synth.getVoice(i))))
@@ -303,33 +310,28 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
                 
             }
             thisVoice->setMasterLevel(tree.getRawParameterValue("masterLevelParam"));
+            if(thisVoice->isVoiceActive())
+            {
+                voiceToDraw = thisVoice;
+                activeVoice = true;
+            }
         }
+        
     }
     buffer.clear();
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    /*
-    float masterLevel = buffer.getRMSLevel(0, 0, buffer.getNumSamples());
-    for(int i = 0; i < 3; ++i)
+    if(activeVoice)
     {
-        juce::String iStr = juce::String(i);
-        auto nPar = "nParam" + iStr;
-        auto p0Par = "p0Param" + iStr;
-        auto p1Par = "p1Param" + iStr;
-        auto algPar = "algParam" + iStr;
-        
-        float oscN = thisVoice->allOscs[i]->currentHarmonicCount;
-        float oscP0 = thisVoice->allOscs[i]->currentP0;
-        float oscP1 = thisVoice->allOscs[i]->currentP1;
-        bool oscSecondAlg = thisVoice->allOscs[i]->secondAlgOn;
-        
-        allGraphValues[i]->setNumHarmonics(oscN);
-        allGraphValues[i]->setP0(oscP0);
-        allGraphValues[i]->setP1(oscP1);
-        allGraphValues[i]->setAlgSelection(oscSecondAlg);
-        allGraphValues[i]->setMasterVol(masterLevel);
-        allGraphValues[i]->setDisplayPoints();
+        for(int i = 0; i < 3; ++i)
+        {
+            juce::String iStr = juce::String(i);
+            monitors[i]->setP0(&voiceToDraw->allOscs[i]->currentP0);
+            monitors[i]->setP1(&voiceToDraw->allOscs[i]->currentP1);
+            monitors[i]->setN(&voiceToDraw->allOscs[i]->currentHarmonicCount);
+            monitors[i]->setAlg2(voiceToDraw->allOscs[i]->secondAlgOn);
+            monitors[i]->setLevel(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        }
     }
-    */
 }
 
 //==============================================================================

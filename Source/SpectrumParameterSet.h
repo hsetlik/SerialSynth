@@ -45,6 +45,7 @@ public:
     //-detune slider and modDest
     //-pan slider and modDest
     
+    OscillatorGraph scope;
     juce::Slider::Listener* listener;
     
     EnvelopeSliderSet envSliders;

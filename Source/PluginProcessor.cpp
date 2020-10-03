@@ -231,6 +231,11 @@ void SpectrumTable1AudioProcessor::prepareToPlay (double rate, int samplesPerBlo
     // initialisation that you need..
     juce::ignoreUnused(samplesPerBlock);
     synth.setCurrentPlaybackSampleRate(rate);
+    
+    juce::dsp::ProcessSpec spec;
+    spec.sampleRate = rate;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumOutputChannels();
 }
 
 void SpectrumTable1AudioProcessor::releaseResources()
@@ -317,6 +322,7 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
                 thisVoice->setAlgChoice(tree.getRawParameterValue(algName), n);
                 
             }
+            thisVoice->lastSampleRate = getSampleRate();
             thisVoice->setMasterLevel(tree.getRawParameterValue("masterLevelParam"));
             if(thisVoice->isVoiceActive())
             {
@@ -385,9 +391,17 @@ void SpectrumTable1AudioProcessor::addVoiceModulation(juce::String sourceId, juc
             currentDest = &currentOsc->nModProc;
         else if(destId == "detuneDest")
             currentDest = &currentOsc->detuneProc;
+        /*
+        else if(destId == "cutoffDest")
+            currentDest = &currentVoice->filter.cutoffDest;
+        else if(destId == "resDest")
+            currentDest = &currentVoice->filter.resDest;
+        else if(destId == "filterMixDest")
+            currentDest = &currentVoice->filter.mixDest;
+         */
         else
             currentDest = nullptr;
-    //ModDestProcessor.addSource(sourceId)
+            
         currentDest->addSource(sourceId);
     }
 }
@@ -409,8 +423,18 @@ void SpectrumTable1AudioProcessor::removeVoiceModulation(juce::String sourceId, 
             currentDest = &currentOsc->nModProc;
         else if(destId == "detuneDest")
             currentDest = &currentOsc->detuneProc;
+        /*
+        else if(destId == "cutoffDest")
+         
+            currentDest = &currentVoice->filter.cutoffDest;
+        else if(destId == "resDest")
+            currentDest = &currentVoice->filter.resDest;
+        else if(destId == "filterMixDest")
+            currentDest = &currentVoice->filter.mixDest;
+             */
         else
             currentDest = nullptr;
+        
     currentDest->removeSource(sourceId);
     }
 }
@@ -420,7 +444,45 @@ void SpectrumTable1AudioProcessor::setModDepth(juce::String sourceId, juce::Stri
     //loop through all the modulations until one with matching sourceId, destId, and index is found
     for(int g = 0; g < synth.getNumVoices(); ++g)
     {
+        
         SpectrumVoice* currentVoice = dynamic_cast<SpectrumVoice*>(synth.getVoice(g));
+        /*
+        if(destId == "detuneDest")
+        {
+            for(int i = 0; i < currentVoice->filter.cutoffDest.sources.size(); ++i)
+            {
+                juce::String checkAgainst = currentVoice->filter.cutoffDest.sources[i]->sourceId;
+                if(checkAgainst == sourceId)
+                {
+                    currentVoice->filter.cutoffDest.sources[i]->setDepth(value);
+                }
+            }
+        }
+     
+        if(destId == "resDest")
+        {
+            for(int i = 0; i < currentVoice->filter.resDest.sources.size(); ++i)
+            {
+                juce::String checkAgainst = currentVoice->filter.resDest.sources[i]->sourceId;
+                if(checkAgainst == sourceId)
+                {
+                    currentVoice->filter.resDest.sources[i]->setDepth(value);
+                }
+            }
+        }
+        if(destId == "filterMixDest")
+        {
+            for(int i = 0; i < currentVoice->filter.mixDest.sources.size(); ++i)
+            {
+                juce::String checkAgainst = currentVoice->filter.mixDest.sources[i]->sourceId;
+                if(checkAgainst == sourceId)
+                {
+                    currentVoice->filter.mixDest.sources[i]->setDepth(value);
+                }
+            }
+        }
+         */
+        
         for(int oscInd = 0; oscInd < 3; ++oscInd)
         {
             if(index == oscInd)

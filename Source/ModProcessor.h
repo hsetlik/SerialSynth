@@ -33,8 +33,8 @@ public:
     }
     //data
     float depth = 0.0f;
-    juce::String sourceId;
     ModGenerator* generator;
+    juce::String sourceId;
 };
 
 
@@ -45,7 +45,7 @@ public:
     //functions
     ModDestProcessor(juce::String dId, int index, VoiceModGenerators* gens) : destId(dId), oscIndex(index), allGens(gens)
     {
-        printf("Dest processor creaded: %s\n", dId.toRawUTF8());
+        
     }
     ~ModDestProcessor() {}
     
@@ -54,9 +54,9 @@ public:
     void removeSource(juce::String sourceId);
     float getParameterDelta(); //returns the value to be added to the target parameter value this sample
     //data
-    VoiceModGenerators* allGens;
     juce::String destId;
     int oscIndex;
+    VoiceModGenerators* allGens;
     juce::OwnedArray<ModSourceProcessor> sources;
 private:
 };

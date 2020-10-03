@@ -12,6 +12,7 @@
 #include <JuceHeader.h>
 #include "maximilian.h"
 #include "MultiModDestination.h"
+#include "RGBColor.h"
 class FilterControls : public juce::Component
 {
 public:
@@ -27,6 +28,7 @@ public:
     }
     ~FilterControls() {}
     void attachToTree(juce::AudioProcessorValueTreeState* tree);
+    void paint(juce::Graphics& g) override;
     void resized() override;
     //data
     MultiModDestination mixKnob;
@@ -36,5 +38,7 @@ public:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mixAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> resAttach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> cutoffAttach;
+private:
+    ColorCreator color;
     
 };

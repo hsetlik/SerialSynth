@@ -29,3 +29,9 @@ void FilterControls::resized()
     resKnob.setBounds(8 * n, n, 5 * n, 8 * n);
     mixKnob.setBounds(n, n, 5 * n, 8 * n);
 }
+
+void FilterControls::paint(juce::Graphics &g)
+{
+    g.setColour(color.RGBColor(226, 76, 86));
+    g.fillAll();
+}

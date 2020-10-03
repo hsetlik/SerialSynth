@@ -13,6 +13,7 @@
 #include "SpectrumOscillator.h"
 #include "ModProcessor.h"
 #include "MixProcessor.h"
+#include "FilterProcessor.h"
 
 class SpectrumSound : public juce::SynthesiserSound
 {
@@ -362,6 +363,8 @@ public:
         HarmonicOscillator* thisOsc = allOscs[index];
         thisOsc->envelope1.setRelease(*value);
     }
+    //FILTER============================
+    
     //END PARAMETER INPUTS================================
     bool canPlaySound(juce::SynthesiserSound* sound)
     {
@@ -416,12 +419,6 @@ public:
     //===============================================
     void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
     {
-        /*
-        for(int n = 0; n > 3; ++n)
-        {
-            allOscs[n]->applyModulations();
-        }
-         */
         for(int i = 0; i < numSamples; ++i)
         {
             float sum = 0.0f;
@@ -432,11 +429,11 @@ public:
                 newPreEnv *= mixer.getOscLevel(g);
                 sum += (allOscs[g]->envelope1.adsr(newPreEnv, allOscs[g]->envelope1.trigger));
             }
-            float newSample = sum / 3.0f;
-            newSample *= mixer.masterLevel;
+            float rawSample = sum / 3.0f;
+            rawSample *= mixer.masterLevel;
             for(int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
             {
-                outputBuffer.addSample(channel, startSample, newSample);
+                outputBuffer.addSample(channel, startSample, rawSample);
             }
             ++startSample;
         }
@@ -447,6 +444,7 @@ public:
     {
         
     }
+    double lastSampleRate = 44100;
     juce::OwnedArray<HarmonicOscillator> allOscs;
     VoiceModGenerators allGens;
     MixerProcessor mixer;

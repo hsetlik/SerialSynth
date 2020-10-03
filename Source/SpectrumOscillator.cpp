@@ -11,19 +11,13 @@
 #include "SpectrumOscillator.h"
 
 HarmonicOscillator::HarmonicOscillator(int maxOvertones, int index, VoiceModGenerators* genSet) :
+gens(genSet),
 p1ModProc("p1Dest", index, gens),
 p0ModProc("p0Dest", index, gens),
 nModProc("nDest", index, gens),
 detuneProc("detuneDest", index, gens),
-gens(genSet),
 maxHarmonicCount(maxOvertones)
 {
-    /*
-    envelope1.setAttack(20.0f);
-    envelope1.setRelease(85.0f);
-    envelope1.setSustain(0.6f);
-    envelope1.setRelease(150.0f);
-     */
     for(int i = 0; i < maxHarmonicCount; ++i)
     {
         std::unique_ptr<HarmonicData> newHarmonic(new HarmonicData(i));

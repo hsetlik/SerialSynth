@@ -72,6 +72,7 @@ public:
     maxiEnv envelope1;
     maxiEnv envelope2;
     int lastMidiNote = 0;
+    
 private:
     float fundamental = 0.0f;
     

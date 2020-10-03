@@ -64,6 +64,8 @@ public:
     //GraphValueSet graphValues1;
     
 private:
+    float lastSampleRate;
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> lowPassFilter;
     juce::Synthesiser synth;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SpectrumTable1AudioProcessor)

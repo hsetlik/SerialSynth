@@ -31,7 +31,7 @@ public:
 class SpectrumVoice : public juce::SynthesiserVoice
 {
 public:
-    SpectrumVoice()
+    SpectrumVoice() : filter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 20000.0f, 0.1f))
     {
         for(int i = 0; i < 3; ++i)
         {
@@ -39,214 +39,15 @@ public:
         }
     }
     
-    float getEnvAttack(int index)
-    {
-        EnvelopeProcessor* thisEnv;
-        switch(index)
-        {
-            case 0:
-            {
-                thisEnv = allGens.pEnv0;
-                break;
-            }
-            case 1:
-            {
-                thisEnv = allGens.pEnv1;
-                break;
-            }
-            case 2:
-            {
-                thisEnv = allGens.pEnv2;
-                break;
-            }
-        }
-        return thisEnv->attackValue();
-    }
-    float getEnvDecay(int index)
-    {
-        EnvelopeProcessor* thisEnv;
-        switch(index)
-        {
-            case 0:
-            {
-                thisEnv = allGens.pEnv0;
-                break;
-            }
-            case 1:
-            {
-                thisEnv = allGens.pEnv1;
-                break;
-            }
-            case 2:
-            {
-                thisEnv = allGens.pEnv2;
-                break;
-            }
-        }
-        return thisEnv->decayValue();
-    }
-    float getEnvSustain(int index)
-    {
-        EnvelopeProcessor* thisEnv;
-        switch(index)
-        {
-            case 0:
-            {
-                thisEnv = allGens.pEnv0;
-                break;
-            }
-            case 1:
-            {
-                thisEnv = allGens.pEnv1;
-                break;
-            }
-            case 2:
-            {
-                thisEnv = allGens.pEnv2;
-                break;
-            }
-        }
-        return thisEnv->sustainValue();
-    }
-    float getEnvRelease(int index)
-    {
-        EnvelopeProcessor* thisEnv;
-        switch(index)
-        {
-            case 0:
-            {
-                thisEnv = allGens.pEnv0;
-                break;
-            }
-            case 1:
-            {
-                thisEnv = allGens.pEnv1;
-                break;
-            }
-            case 2:
-            {
-                thisEnv = allGens.pEnv2;
-                break;
-            }
-        }
-        return thisEnv->releaseValue();
-    }
-    
-    void setLfoRate(std::atomic<float>* value, int index)
-    {
-        LfoProcessor* thisLfo;
-        switch(index)
-        {
-            case 0:
-            {
-                thisLfo = allGens.pLfo0;
-                break;
-            }
-            case 1:
-            {
-                thisLfo = allGens.pLfo1;
-                break;
-            }
-            case 2:
-            {
-                thisLfo = allGens.pLfo2;
-                break;
-            }
-        }
-        thisLfo->setRate(*value);
-    }
-    void setModAttack(std::atomic<float>* value, int index)
-    {
-        EnvelopeProcessor* thisEnv;
-        switch(index)
-        {
-            case 0:
-            {
-                thisEnv = allGens.pEnv0;
-                break;
-            }
-            case 1:
-            {
-                thisEnv = allGens.pEnv1;
-                break;
-            }
-            case 2:
-            {
-                thisEnv = allGens.pEnv2;
-                break;
-            }
-        }
-        thisEnv->setAttack(*value);
-    }
-    void setModDecay(std::atomic<float>* value, int index)
-    {
-        EnvelopeProcessor* thisEnv;
-        switch(index)
-        {
-            case 0:
-            {
-                thisEnv = allGens.pEnv0;
-                break;
-            }
-            case 1:
-            {
-                thisEnv = allGens.pEnv1;
-                break;
-            }
-            case 2:
-            {
-                thisEnv = allGens.pEnv2;
-                break;
-            }
-        }
-        thisEnv->setDecay(*value);
-    }
-    void setModSustain(std::atomic<float>* value, int index)
-    {
-        EnvelopeProcessor* thisEnv;
-        switch(index)
-        {
-            case 0:
-            {
-                thisEnv = allGens.pEnv0;
-                break;
-            }
-            case 1:
-            {
-                thisEnv = allGens.pEnv1;
-                break;
-            }
-            case 2:
-            {
-                thisEnv = allGens.pEnv2;
-                break;
-            }
-        }
-        thisEnv->setSustain(*value);
-    }
-    void setModRelease(std::atomic<float>* value, int index)
-    {
-        EnvelopeProcessor* thisEnv;
-        switch(index)
-        {
-            case 0:
-            {
-                thisEnv = allGens.pEnv0;
-                break;
-            }
-            case 1:
-            {
-                thisEnv = allGens.pEnv1;
-                break;
-            }
-            case 2:
-            {
-                thisEnv = allGens.pEnv2;
-                break;
-            }
-        }
-        thisEnv->setRelease(*value);
-    }
+    float getEnvAttack(int index);
+    float getEnvDecay(int index);
+    float getEnvSustain(int index);
+    float getEnvRelease(int index);
+    void setLfoRate(std::atomic<float>* value, int index);
+    void setModAttack(std::atomic<float>* value, int index);
+    void setModDecay(std::atomic<float>* value, int index);
+    void setModSustain(std::atomic<float>* value, int index);
+    void setModRelease(std::atomic<float>* value, int index);
     void setOscLevel(std::atomic<float>* value, int n)
     {
         mixer.setOscLevel(*value, n);
@@ -255,52 +56,7 @@ public:
     {
         mixer.masterLevel = *value;
     }
-    void setLfoWave(std::atomic<float>* value, int n)
-    {
-        LfoProcessor* thisLfo;
-        switch(n)
-        {
-            case 0:
-            {
-                thisLfo = allGens.pLfo0;
-                break;
-            }
-            case 1:
-            {
-                thisLfo = allGens.pLfo1;
-                break;
-            }
-            case 2:
-            {
-                thisLfo = allGens.pLfo2;
-                break;
-            }
-        }
-        int choiceIndex = (int)*value;
-        switch(choiceIndex)
-        {
-            case 0:
-            {
-                thisLfo->setWaveType("Sine");
-                break;
-            }
-            case 1:
-            {
-                thisLfo->setWaveType("Saw");
-                break;
-            }
-            case 2:
-            {
-                thisLfo->setWaveType("Triangle");
-                break;
-            }
-            case 3:
-            {
-                thisLfo->setWaveType("Square");
-                break;
-            }
-        }
-    }
+    void setLfoWave(std::atomic<float>* value, int n);
     //PARAMETER INPUT FUNCTIONS
     void setVoiceP0(std::atomic<float>* value, int index)
     {
@@ -364,12 +120,14 @@ public:
         thisOsc->envelope1.setRelease(*value);
     }
     //FILTER============================
-    
+    void updateFilter();
     //END PARAMETER INPUTS================================
     bool canPlaySound(juce::SynthesiserSound* sound)
     {
         return dynamic_cast<SpectrumSound*>(sound) != nullptr;
     }
+    void prepareVoice(double sampleRate, int samplesPerBlock);
+    
     void startNote (int midiNoteNumber,
                     float velocity,
                     juce::SynthesiserSound *sound,
@@ -416,6 +174,12 @@ public:
     {
         
     }
+    //====================================================
+    void updateJuceFilter()
+    {
+        
+    }
+    
     //===============================================
     void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
     {
@@ -437,7 +201,7 @@ public:
             }
             ++startSample;
         }
-       
+        
     }
     //==============================================
     void setCurrentPlaybackSampleRate (double newRate)
@@ -445,7 +209,9 @@ public:
         
     }
     double lastSampleRate = 44100;
+    
     juce::OwnedArray<HarmonicOscillator> allOscs;
     VoiceModGenerators allGens;
     MixerProcessor mixer;
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> filter;
 };

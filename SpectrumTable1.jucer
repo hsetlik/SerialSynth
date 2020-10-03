@@ -42,6 +42,8 @@
               file="Source/SpectrumOscillator.cpp"/>
         <FILE id="QVLf1S" name="SpectrumOscillator.h" compile="0" resource="0"
               file="Source/SpectrumOscillator.h"/>
+        <FILE id="e0xjv7" name="SpectrumSynthVoice.cpp" compile="1" resource="0"
+              file="Source/SpectrumSynthVoice.cpp"/>
         <FILE id="MVhs6M" name="SpectrumSynthVoice.h" compile="0" resource="0"
               file="Source/SpectrumSynthVoice.h"/>
       </GROUP>

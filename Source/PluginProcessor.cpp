@@ -143,7 +143,8 @@ SpectrumTable1AudioProcessor::SpectrumTable1AudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ), tree(*this, nullptr, "ALLPARAMETERS", createLayout())
+                       ), tree(*this, nullptr, "ALLPARAMETERS", createLayout()),
+lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 20000.0f, 0.1f))
 #endif
 {
     for(int i = 0; i < 6; ++i)
@@ -232,10 +233,14 @@ void SpectrumTable1AudioProcessor::prepareToPlay (double rate, int samplesPerBlo
     juce::ignoreUnused(samplesPerBlock);
     synth.setCurrentPlaybackSampleRate(rate);
     
+    lastSampleRate = rate;
+    
     juce::dsp::ProcessSpec spec;
     spec.sampleRate = rate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
+    
+    lowPassFilter.prepare(spec);
 }
 
 void SpectrumTable1AudioProcessor::releaseResources()
@@ -322,7 +327,7 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
                 thisVoice->setAlgChoice(tree.getRawParameterValue(algName), n);
                 
             }
-            thisVoice->lastSampleRate = getSampleRate();
+            //thisVoice->lastSampleRate = getSampleRate();
             thisVoice->setMasterLevel(tree.getRawParameterValue("masterLevelParam"));
             if(thisVoice->isVoiceActive())
             {
@@ -334,6 +339,8 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     }
     buffer.clear();
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    juce::dsp::AudioBlock<float> block(buffer);
+    lowPassFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
     if(activeVoice)
     {
         for(int i = 0; i < 3; ++i)

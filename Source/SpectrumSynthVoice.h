@@ -31,7 +31,7 @@ public:
 class SpectrumVoice : public juce::SynthesiserVoice
 {
 public:
-    SpectrumVoice() : filter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 20000.0f, 0.1f))
+    SpectrumVoice()
     {
         for(int i = 0; i < 3; ++i)
         {
@@ -121,6 +121,9 @@ public:
     }
     //FILTER============================
     void updateFilter();
+    void setFilterCutoff(std::atomic<float>* value);
+    void setFilterRes(std::atomic<float>* value);
+    void applyFilterModulations(); //just call this at the start of the updateFilter function
     //END PARAMETER INPUTS================================
     bool canPlaySound(juce::SynthesiserSound* sound)
     {
@@ -175,34 +178,10 @@ public:
         
     }
     //====================================================
-    void updateJuceFilter()
-    {
-        
-    }
+    void updateJuceFilter();
     
     //===============================================
-    void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
-    {
-        for(int i = 0; i < numSamples; ++i)
-        {
-            float sum = 0.0f;
-            for(int g = 0; g < 3; ++g)
-            {
-                allOscs[g]->applyModulations();
-                float newPreEnv = allOscs[g]->getNextSample();
-                newPreEnv *= mixer.getOscLevel(g);
-                sum += (allOscs[g]->envelope1.adsr(newPreEnv, allOscs[g]->envelope1.trigger));
-            }
-            float rawSample = sum / 3.0f;
-            rawSample *= mixer.masterLevel;
-            for(int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
-            {
-                outputBuffer.addSample(channel, startSample, rawSample);
-            }
-            ++startSample;
-        }
-        
-    }
+    void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples);
     //==============================================
     void setCurrentPlaybackSampleRate (double newRate)
     {
@@ -213,5 +192,4 @@ public:
     juce::OwnedArray<HarmonicOscillator> allOscs;
     VoiceModGenerators allGens;
     MixerProcessor mixer;
-    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> filter;
 };

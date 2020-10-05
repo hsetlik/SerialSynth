@@ -58,5 +58,6 @@ public:
     int oscIndex;
     VoiceModGenerators* allGens;
     juce::OwnedArray<ModSourceProcessor> sources;
-private:
 };
+
+

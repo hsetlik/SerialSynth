@@ -18,13 +18,17 @@ class FilterControls : public juce::Component
 public:
     //functions
     FilterControls(SpectrumTable1AudioProcessor& proc, juce::Slider::Listener* lstnr) :
-    mixKnob("filterMixDest", false, 1.0f, 20000.0f, 1, lstnr, proc, juce::Slider::Rotary),
+    mixKnob("filterMixDest", false, 0.0f, 1.0f, 1, lstnr, proc, juce::Slider::Rotary),
     resKnob("resDest", false, 1.0f, 100.0f, 1, lstnr, proc, juce::Slider::Rotary),
-    cutoffKnob("cutoffDest", false, 0.0f, 1.0f, 1, lstnr, proc, juce::Slider::Rotary)
+    cutoffKnob("cutoffDest", false, 1.0f, 20000.0f, 20000.0f, lstnr, proc, juce::Slider::Rotary)
     {
         addAndMakeVisible(cutoffKnob);
         addAndMakeVisible(resKnob);
         addAndMakeVisible(mixKnob);
+        
+        cutoffKnob.paramSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 45, 15);
+        resKnob.paramSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 45, 15);
+        mixKnob.paramSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 45, 15);
     }
     ~FilterControls() {}
     void attachToTree(juce::AudioProcessorValueTreeState* tree);

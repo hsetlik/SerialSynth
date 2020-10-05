@@ -57,6 +57,7 @@ public:
     void setModDepth(juce::String sourceId, juce::String destId, int index, float value);
     void addVoiceModulation(juce::String sourceId, juce::String destId, int index);
     void removeVoiceModulation(juce::String sourceId, juce::String destId, int index, juce::Component* mSlider);
+    void updateJuceFilter();
     
     SpectrumVoice* thisVoice;
     juce::AudioProcessorValueTreeState tree;
@@ -64,8 +65,11 @@ public:
     //GraphValueSet graphValues1;
     
 private:
+    ModDestProcessor cutoffDest;
+    ModDestProcessor resDest;
+    VoiceModGenerators filterGens;
     float lastSampleRate;
-    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> lowPassFilter;
+    juce::dsp::ProcessorDuplicator<juce::dsp::StateVariableFilter::Filter<float>, juce::dsp::StateVariableFilter::Parameters<float>> lowPassFilter;
     juce::Synthesiser synth;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SpectrumTable1AudioProcessor)

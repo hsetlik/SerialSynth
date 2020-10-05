@@ -83,11 +83,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout createLayout()
     }
     auto cutoffId = "cutoffParam";
     auto cutoffName = "Filter Cutoff";
-    juce::NormalisableRange<float> cutoffRange(1.0f, 20000.0f, 0.5f, 0.3);
-    cutoffRange.setSkewForCentre(6500.0f);
-    layout.add(std::make_unique<juce::AudioParameterFloat>(cutoffId, cutoffName, cutoffRange, 20000.0f));
+    juce::NormalisableRange<float> cutoffRange(1.0f, 20000.0f, 1.0f, 0.3);
+    cutoffRange.setSkewForCentre(1000.0f);
+    layout.add(std::make_unique<juce::AudioParameterFloat>(cutoffId, cutoffName, cutoffRange, 5000.0f));
     layout.add(std::make_unique<juce::AudioParameterFloat>("resParam", "Filter Resonance", 1.0f, 100.0f, 1.0f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("filterMixParam", "Filter Wet/Dry", 0.0f, 1.0f, 0.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("filterMixParam", "Filter Wet/Dry", 0.0f, 1.0f, 1.0f));
+    
     
     auto masterLevelId = "masterLevelParam";
     auto masterLevelName = "Master Level";
@@ -125,9 +126,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout createLayout()
     layout.add(std::make_unique<juce::AudioParameterChoice>(lfoTypeId, lfoTypeName, wavetypes, 0));
     layout.add(std::make_unique<juce::AudioParameterChoice>(lfoTypeId1, lfoTypeName1, wavetypes, 0));
     layout.add(std::make_unique<juce::AudioParameterChoice>(lfoTypeId2, lfoTypeName2, wavetypes, 0));
-    
-    
-    
     return layout;
 }
 
@@ -144,7 +142,8 @@ SpectrumTable1AudioProcessor::SpectrumTable1AudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ), tree(*this, nullptr, "ALLPARAMETERS", createLayout()),
-lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 20000.0f, 0.1f))
+cutoffDest("cutoffDest", 0, &filterGens),
+resDest("resDest", 0, &filterGens)
 #endif
 {
     for(int i = 0; i < 6; ++i)
@@ -228,8 +227,6 @@ void SpectrumTable1AudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void SpectrumTable1AudioProcessor::prepareToPlay (double rate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
     juce::ignoreUnused(samplesPerBlock);
     synth.setCurrentPlaybackSampleRate(rate);
     
@@ -327,7 +324,7 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
                 thisVoice->setAlgChoice(tree.getRawParameterValue(algName), n);
                 
             }
-            //thisVoice->lastSampleRate = getSampleRate();
+            thisVoice->lastSampleRate = getSampleRate();
             thisVoice->setMasterLevel(tree.getRawParameterValue("masterLevelParam"));
             if(thisVoice->isVoiceActive())
             {
@@ -339,8 +336,10 @@ void SpectrumTable1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     }
     buffer.clear();
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    juce::dsp::AudioBlock<float> block(buffer);
-    lowPassFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
+    updateJuceFilter();
+    juce::dsp::AudioBlock<float> audioBlock(buffer);
+    lowPassFilter.process(juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    //Handling the oscilloscope
     if(activeVoice)
     {
         for(int i = 0; i < 3; ++i)
@@ -398,14 +397,10 @@ void SpectrumTable1AudioProcessor::addVoiceModulation(juce::String sourceId, juc
             currentDest = &currentOsc->nModProc;
         else if(destId == "detuneDest")
             currentDest = &currentOsc->detuneProc;
-        /*
         else if(destId == "cutoffDest")
-            currentDest = &currentVoice->filter.cutoffDest;
+            currentDest = &cutoffDest;
         else if(destId == "resDest")
-            currentDest = &currentVoice->filter.resDest;
-        else if(destId == "filterMixDest")
-            currentDest = &currentVoice->filter.mixDest;
-         */
+            currentDest = &resDest;
         else
             currentDest = nullptr;
             
@@ -430,15 +425,10 @@ void SpectrumTable1AudioProcessor::removeVoiceModulation(juce::String sourceId, 
             currentDest = &currentOsc->nModProc;
         else if(destId == "detuneDest")
             currentDest = &currentOsc->detuneProc;
-        /*
         else if(destId == "cutoffDest")
-         
-            currentDest = &currentVoice->filter.cutoffDest;
+            currentDest = &cutoffDest;
         else if(destId == "resDest")
-            currentDest = &currentVoice->filter.resDest;
-        else if(destId == "filterMixDest")
-            currentDest = &currentVoice->filter.mixDest;
-             */
+            currentDest = &resDest;
         else
             currentDest = nullptr;
         
@@ -451,45 +441,15 @@ void SpectrumTable1AudioProcessor::setModDepth(juce::String sourceId, juce::Stri
     //loop through all the modulations until one with matching sourceId, destId, and index is found
     for(int g = 0; g < synth.getNumVoices(); ++g)
     {
-        
         SpectrumVoice* currentVoice = dynamic_cast<SpectrumVoice*>(synth.getVoice(g));
-        /*
-        if(destId == "detuneDest")
+        if(destId == "cutoffDest")
         {
-            for(int i = 0; i < currentVoice->filter.cutoffDest.sources.size(); ++i)
-            {
-                juce::String checkAgainst = currentVoice->filter.cutoffDest.sources[i]->sourceId;
-                if(checkAgainst == sourceId)
-                {
-                    currentVoice->filter.cutoffDest.sources[i]->setDepth(value);
-                }
-            }
+            
         }
-     
         if(destId == "resDest")
         {
-            for(int i = 0; i < currentVoice->filter.resDest.sources.size(); ++i)
-            {
-                juce::String checkAgainst = currentVoice->filter.resDest.sources[i]->sourceId;
-                if(checkAgainst == sourceId)
-                {
-                    currentVoice->filter.resDest.sources[i]->setDepth(value);
-                }
-            }
+            
         }
-        if(destId == "filterMixDest")
-        {
-            for(int i = 0; i < currentVoice->filter.mixDest.sources.size(); ++i)
-            {
-                juce::String checkAgainst = currentVoice->filter.mixDest.sources[i]->sourceId;
-                if(checkAgainst == sourceId)
-                {
-                    currentVoice->filter.mixDest.sources[i]->setDepth(value);
-                }
-            }
-        }
-         */
-        
         for(int oscInd = 0; oscInd < 3; ++oscInd)
         {
             if(index == oscInd)
@@ -504,7 +464,6 @@ void SpectrumTable1AudioProcessor::setModDepth(juce::String sourceId, juce::Stri
                            currentVoice->allOscs[oscInd]->p0ModProc.sources[n]->setDepth(value);
                        }
                    }
-                   
                }
                 else if(destId == "p1Dest")
                 {
@@ -516,7 +475,6 @@ void SpectrumTable1AudioProcessor::setModDepth(juce::String sourceId, juce::Stri
                             currentVoice->allOscs[oscInd]->p1ModProc.sources[n]->setDepth(value);
                         }
                     }
-                    
                 }
                 else if(destId == "nDest")
                 {
@@ -528,7 +486,6 @@ void SpectrumTable1AudioProcessor::setModDepth(juce::String sourceId, juce::Stri
                             currentVoice->allOscs[oscInd]->nModProc.sources[n]->setDepth(value);
                         }
                     }
-                    
                 }
                 else if(destId == "detuneDest")
                 {
@@ -545,6 +502,13 @@ void SpectrumTable1AudioProcessor::setModDepth(juce::String sourceId, juce::Stri
             }
         }
     }
+}
+void SpectrumTable1AudioProcessor::updateJuceFilter()
+{
+    float newCutoff = *tree.getRawParameterValue("cutoffParam");
+    float newRes = *tree.getRawParameterValue("resParam");
+    lowPassFilter.state->type = juce::dsp::StateVariableFilter::Parameters<float>::Type::lowPass;
+    lowPassFilter.state->setCutOffFrequency(lastSampleRate, newCutoff, newRes);
 }
 //==============================================================================
 // This creates new instances of the plugin..

@@ -10,16 +10,29 @@
 
 #include "SpectrumSynthVoice.h"
 
-void SpectrumVoice::prepareVoice(double sampleRate, int samplesPerBlock)
+void SpectrumVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
 {
-    juce::dsp::ProcessSpec spec;
-    spec.sampleRate = sampleRate;
-    spec.maximumBlockSize = samplesPerBlock;
-    spec.numChannels = 2;
-    filter.prepare(spec);
+    //updateJuceFilter();
+    for(int i = 0; i < numSamples; ++i)
+    {
+        
+        float sum = 0.0f;
+        for(int g = 0; g < 3; ++g)
+        {
+            allOscs[g]->applyModulations();
+            float newPreEnv = allOscs[g]->getNextSample();
+            newPreEnv *= mixer.getOscLevel(g);
+            sum += (allOscs[g]->envelope1.adsr(newPreEnv, allOscs[g]->envelope1.trigger));
+        }
+        float rawSample = sum / 3.0f;
+        rawSample *= mixer.masterLevel;
+        for(int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
+        {
+            outputBuffer.addSample(channel, startSample, rawSample);
+        }
+        ++startSample;
+    }
 }
-
-
 float SpectrumVoice::getEnvAttack(int index)
 {
     EnvelopeProcessor* thisEnv;
@@ -228,7 +241,6 @@ void SpectrumVoice::setModRelease(std::atomic<float>* value, int index)
     }
     thisEnv->setRelease(*value);
 }
-
 void SpectrumVoice::setLfoWave(std::atomic<float>* value, int n)
 {
     LfoProcessor* thisLfo;

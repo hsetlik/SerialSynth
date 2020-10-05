@@ -15,11 +15,7 @@ void FilterControls::attachToTree(juce::AudioProcessorValueTreeState *tree)
 {
     cutoffAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, "cutoffParam", cutoffKnob.paramSlider));
     resAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, "resParam", resKnob.paramSlider));
-    mixAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, "filterMixParam", cutoffKnob.paramSlider));
-    
-    cutoffKnob.paramSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 45, 15);
-    resKnob.paramSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 45, 15);
-    mixKnob.paramSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 45, 15);
+    mixAttach.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(*tree, "filterMixParam", mixKnob.paramSlider));
 }
 
 void FilterControls::resized()
